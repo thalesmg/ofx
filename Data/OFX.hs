@@ -150,6 +150,13 @@ ofxFile
   <* many newline
   <* eof
 
+-- | Parses an OFX date; provides an error message if the parse fails.
+parseDate :: String -> Ex.Exceptional String T.ZonedTime
+parseDate s = case P.parse date "" s of
+  Left e -> Ex.throw $ "could not parse date: " ++ s ++ ": "
+            ++ show e
+  Right g -> return g
+
 -- | Parses an OFX date. Fails if the date is not valid or if there is
 -- no date to be parsed.
 date :: Parser T.ZonedTime
@@ -256,6 +263,11 @@ required :: TagName -> Tag -> Ex.Exceptional String TagData
 required n t = case findData n t of
   Nothing -> Ex.throw $ "required tag missing: " ++ n
   Just r -> return r
+
+-- | Finds the first tag that has the given name; returns an empty
+-- string if the tag is not found.
+notRequired :: TagName -> Tag -> TagData
+notRequired n t = Ex.resolve (const "") $ required n t
 
 --
 -- OFX data
@@ -428,7 +440,7 @@ data CorrectAction
 
   | DELETE
   -- ^ Deletes the transaction referenced by the CORRECTFITID
-  deriving (Eq, Show)
+  deriving (Eq, Show, Read)
 
 data BankAcctTo = BankAcctTo
   { btBANKID :: String
@@ -502,3 +514,87 @@ trnType d = case d of
   "REPEATPMT" -> Just TREPEATPMT
   "OTHER" -> Just TOTHER
   _ -> Nothing
+
+-- | Gets a single Transaction from a tag. The tag should be the one
+-- named STMTTRN. Fails with an error message if any required field
+-- was not present.
+transaction :: Tag -> Ex.Exceptional String Transaction
+transaction t = do
+  trntyStr <- required "TRNTYPE" t
+  trnTy <- Ex.fromMaybe ("could not parse transaction type: " ++ trntyStr)
+           $ trnType trntyStr
+
+  dtpStr <- required "DTPOSTED" t
+  dtp <- parseDate dtpStr
+
+  let mayDtuStr = findData "DTUSER" t
+  dtu <- maybe (return Nothing) (fmap Just . parseDate) mayDtuStr
+      
+  let mayDtAvail = findData "DTAVAIL" t
+
+  dta <- maybe (return Nothing) (fmap Just . parseDate) mayDtAvail
+  amt <- required "TRNAMT" t
+  fitid <- required "FITID" t
+  let correctFitId = findData "CORRECTFITID" t
+      strCorrectAct = notRequired "CORRECTACTION" t
+  correctAct <- Ex.fromMaybe ( "could not parse correct action: "
+                               ++ strCorrectAct )
+                $ safeRead strCorrectAct
+  let srvrtid = findData "SRVRTID" t
+      checknum = findData "CHECKNUM" t
+      refnum = findData "REFNUM" t
+      sic = findData "SIC" t
+      payeeId = findData "PAYEEID" t
+
+  let mayPyeInfo = fmap (return . Left) (findData "NAME" t)
+                   <|> fmap (fmap Right) (payee t)
+  pyeInfo <- maybe (return Nothing) (fmap Just) mayPyeInfo
+ 
+  let mayAcctTo = (fmap (fmap Left) $ bankAcctTo t)
+               <|> (fmap (fmap Right) $ ccAcctTo t)
+      mayCcy = (fmap (fmap Left) $ currency t)
+            <|> (fmap (fmap Right) $ origCurrency t)
+  acctTo <- maybe (return Nothing) (fmap Just) mayAcctTo
+  ccy <- maybe (return Nothing) (fmap Just) mayCcy
+  let memo = findData "MEMO" t
+
+  return Transaction
+    { txTRNTYPE = trnTy
+    , txDTPOSTED = dtp
+    , txDTUSER = dtu
+    , txDTAVAIL = dta
+    , txTRNAMT = amt
+    , txFITID = fitid
+    , txCORRECTFITID = correctFitId
+    , txCORRECTACTION = correctAct
+    , txSRVRTID = srvrtid
+    , txCHECKNUM = checknum
+    , txREFNUM = refnum
+    , txSIC = sic
+    , txPAYEEID = payeeId
+    , txPayeeInfo = pyeInfo
+    , txAccountTo = acctTo
+    , txMEMO = memo
+    , txCurrency = ccy
+    }      
+
+payee :: Tag -> Maybe (Ex.Exceptional String Payee)
+payee = undefined
+
+currency :: Tag -> Maybe (Ex.Exceptional String Currency)
+currency = undefined
+
+origCurrency :: Tag -> Maybe (Ex.Exceptional String OrigCurrency)
+origCurrency = undefined
+
+bankAcctTo :: Tag -> Maybe (Ex.Exceptional String BankAcctTo)
+bankAcctTo = undefined
+
+ccAcctTo :: Tag -> Maybe (Ex.Exceptional String CCAcctTo)
+ccAcctTo = undefined 
+
+safeRead :: Read a => String -> Maybe a
+safeRead s = case reads s of
+  (x, ""):[] -> Just x
+  _ -> Nothing
+
