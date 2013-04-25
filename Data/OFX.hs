@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances, OverloadedStrings #-}
 -- | Parser for downloaded OFX files.
 --
 -- This parser was written based on the OFX version 1.03
@@ -24,7 +25,7 @@ module Data.OFX where
 
 import Control.Applicative
   ( (<$), (<|>), (*>), many, optional,
-    (<$>), (<*), (<*>) )
+    (<$>), (<*), (<*>), pure )
 import Control.Monad (replicateM)
 import qualified Control.Monad.Exception.Synchronous as Ex
 import qualified Data.Time as T
@@ -34,6 +35,9 @@ import Text.Parsec
   ( lookAhead, char, manyTill, anyChar, (<?>), eof, string,
     try, digit, many1 )
 import qualified Text.Parsec as P
+import qualified Text.PrettyPrint as PP
+import Text.PrettyPrint (text, hang, (<+>), sep)
+import Data.Maybe (listToMaybe)
 import qualified Data.Monoid as M
 
 -- | Headers consists of simple @tag:value@ pairs; this represents the
@@ -137,7 +141,8 @@ tag =
             _ <- optional newline
             return $ Tag name (Right ts)
           _ -> do
-            v <- manyTill escChar (eof <|> lookAhead (() <$ char '<'))
+            v <- manyTill escChar
+                 (eof <|> lookAhead (() <$ char '<') <|> newline)
             return $ Tag name (Left v)
       <?> "OFX tag"
 
@@ -264,10 +269,6 @@ required n t = case findData n t of
   Nothing -> Ex.throw $ "required tag missing: " ++ n
   Just r -> return r
 
--- | Finds the first tag that has the given name; returns an empty
--- string if the tag is not found.
-notRequired :: TagName -> Tag -> TagData
-notRequired n t = Ex.resolve (const "") $ required n t
 
 --
 -- OFX data
@@ -421,6 +422,79 @@ data Transaction = Transaction
     -- ORIGCURRENCY.
     } deriving (Show)
 
+class Pretty a where
+  pretty :: a -> PP.Doc
+
+instance Pretty TrnType where
+  pretty = text . show
+
+instance Pretty CorrectAction where
+  pretty = text . show
+
+instance Pretty CCAcctTo where
+  pretty = text . show
+
+instance Pretty BankAcctTo where
+  pretty = text . show
+
+instance Pretty OrigCurrency where
+  pretty = text . show
+
+instance Pretty Currency where
+  pretty = text . show
+
+instance Pretty Payee where
+  pretty a = hang "Payee" 1 ls
+    where
+      ls = sep  [ "Name:" <+> pretty (peNAME a)
+                , "Addr1:" <+> pretty (peADDR1 a)
+                , "Addr2:" <+> pretty (peADDR2 a)
+                , "Addr3:" <+> pretty (peADDR3 a)
+                , "City:" <+> pretty (peCITY a)
+                , "State:" <+> pretty (peSTATE a)
+                , "Postal:" <+> pretty (pePOSTALCODE a)
+                , "Country:" <+> pretty (peCOUNTRY a)
+                , "Phone:" <+> pretty (pePHONE a) ]
+
+instance Pretty Transaction where
+  pretty a = hang "Transaction" 1 ls
+    where
+      ls = sep [ "TRNTYPE:" <+> pretty (txTRNTYPE a)
+               , "DTPOSTED:" <+> pretty (txDTPOSTED a)
+               , "DTUSER:" <+> pretty (txDTUSER a)
+               , "DTAVAIL:" <+> pretty (txDTAVAIL a)
+               , "TRNAMT:" <+> pretty (txTRNAMT a)
+               , "FITID:" <+> pretty (txFITID a)
+               , "CORRECTFITID:" <+> pretty (txCORRECTFITID a)
+               , "CORRECTACTION:" <+> pretty (txCORRECTACTION a)
+               , "SRVRTID:" <+> pretty (txSRVRTID a)
+               , "CHECKNUM:" <+> pretty (txCHECKNUM a)
+               , "REFNUM:" <+> pretty (txREFNUM a)
+               , "SIC:" <+> pretty (txSIC a)
+               , "PAYEEID:" <+> pretty (txPAYEEID a)
+               , "PAYEEINFO:" <+> pretty (txPayeeInfo a)
+               , "ACCOUNTTO:" <+> pretty (txAccountTo a)
+               , "MEMO:" <+> pretty (txMEMO a)
+               , "CURRENCY:" <+> pretty (txCurrency a)
+               ]
+
+instance Pretty [Char] where
+  pretty = text
+
+instance Pretty a => Pretty (Maybe a) where
+  pretty a = case a of
+    Nothing -> "Nothing"
+    Just x -> "Just" <+> pretty x
+
+instance (Pretty a, Pretty b) => Pretty (Either a b) where
+  pretty a = case a of
+    Left l -> "Left" <+> pretty l
+    Right r -> "Right" <+> pretty r
+
+instance Pretty T.ZonedTime where
+  pretty = text . show
+
+
 data Payee = Payee
   { peNAME :: String
   , peADDR1 :: String
@@ -455,7 +529,7 @@ data BankAcctTo = BankAcctTo
   , btACCTTYPE :: AcctType
   -- ^ Type of account
 
-  , btACCTKEY :: String
+  , btACCTKEY :: Maybe String
   -- ^ Checksum for international banks
   } deriving Show
 
@@ -463,7 +537,7 @@ data CCAcctTo = CCAcctTo
   { ctACCTID :: String
   -- ^ Account number
 
-  , ctACCTKEY :: String
+  , ctACCTKEY :: Maybe String
   -- ^ Checksum for international banks
 
   } deriving (Eq, Show)
@@ -474,6 +548,14 @@ data AcctType
   | AMONEYMRKT
   | ACREDITLINE
   deriving (Eq, Show, Ord)
+
+acctType :: String -> Ex.Exceptional String AcctType
+acctType s
+  | s == "CHECKING" = return ACHECKING
+  | s == "SAVINGS" = return ASAVINGS
+  | s == "MONEYMRKT" = return AMONEYMRKT
+  | s == "CREDITLINE" = return ACREDITLINE
+  | otherwise = Ex.throw $ "unrecognized account type: " ++ s
 
 -- | Holds all data both for CURRENCY and for ORIGCURRENCY.
 data CurrencyData = CurrencyData
@@ -536,10 +618,14 @@ transaction t = do
   amt <- required "TRNAMT" t
   fitid <- required "FITID" t
   let correctFitId = findData "CORRECTFITID" t
-      strCorrectAct = notRequired "CORRECTACTION" t
-  correctAct <- Ex.fromMaybe ( "could not parse correct action: "
-                               ++ strCorrectAct )
-                $ safeRead strCorrectAct
+  correctAct <-
+    case findData "CORRECTACTION" t of
+      Nothing -> return Nothing
+      Just d -> 
+        maybe (return Nothing)
+          (Ex.fromMaybe ("could not parse correct action: " ++ d))
+        . safeRead
+        $ d
   let srvrtid = findData "SRVRTID" t
       checknum = findData "CHECKNUM" t
       refnum = findData "REFNUM" t
@@ -578,23 +664,81 @@ transaction t = do
     , txCurrency = ccy
     }      
 
-payee :: Tag -> Maybe (Ex.Exceptional String Payee)
-payee = undefined
+-- | Parses a Payee record from its parent tag.
+payee
+  :: Tag
+  -- ^ The tag which contains the PAYEE tag, if there is one. This
+  -- would typically be a STMTTRN tag.
+
+  -> Maybe (Ex.Exceptional String Payee)
+  -- ^ Nothing if there is no PAYEE tag. Just if a PAYEE tag is found,
+  -- with an Exception if the tag is lacking a required element, or a
+  -- Success if the tag is successfully parsed.
+  --
+  -- If there is more than one PAYEE tag, only the first one is
+  -- considered.
+payee = fmap getPayee . listToMaybe . find "PAYEE"
+  where
+    getPayee t = Payee
+      <$> required "NAME" t
+      <*> required "ADDR1" t
+      <*> pure (findData "ADDR2" t)
+      <*> pure (findData "ADDR3" t)
+      <*> required "CITY" t
+      <*> required "STATE" t
+      <*> required "POSTALCODE" t
+      <*> pure (findData "COUNTRY" t)
+      <*> required "PHONE" t
+  
 
 currency :: Tag -> Maybe (Ex.Exceptional String Currency)
-currency = undefined
+currency
+  = fmap (fmap Currency)
+  . fmap currencyData
+  . listToMaybe
+  . find "CURRENCY"
 
 origCurrency :: Tag -> Maybe (Ex.Exceptional String OrigCurrency)
-origCurrency = undefined
+origCurrency
+  = fmap (fmap OrigCurrency)
+  . fmap currencyData
+  . listToMaybe
+  . find "ORIGCURRENCY"
+
+
+-- | Parses currency data.
+currencyData
+  :: Tag
+  -- ^ The tag that contains the data, e.g. CURRENCY or ORIGCURRENCY.
+
+  -> Ex.Exceptional String CurrencyData
+currencyData t = CurrencyData
+  <$> required "CURRATE" t
+  <*> required "CURSYM" t
 
 bankAcctTo :: Tag -> Maybe (Ex.Exceptional String BankAcctTo)
-bankAcctTo = undefined
+bankAcctTo = fmap getTo . listToMaybe . find "BANKACCTTO"
+  where
+    getTo t = BankAcctTo
+      <$> required "BANKID" t
+      <*> pure (findData "BRANCHID" t)
+      <*> required "ACCTID" t
+      <*> (required "ACCTTYPE" t >>= acctType)
+      <*> pure (findData "ACCTKEY" t)
 
 ccAcctTo :: Tag -> Maybe (Ex.Exceptional String CCAcctTo)
-ccAcctTo = undefined 
+ccAcctTo = fmap getTo . listToMaybe . find "CCACCTTO"
+  where
+    getTo t = CCAcctTo
+      <$> required "ACCTID" t
+      <*> pure (findData "ACCTKEY" t)
 
 safeRead :: Read a => String -> Maybe a
 safeRead s = case reads s of
   (x, ""):[] -> Just x
   _ -> Nothing
 
+
+-- | Pulls all STMTTRN tags from a file.
+transactions :: Tag -> [Tag]
+transactions = find "STMTTRN"

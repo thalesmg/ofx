@@ -70,5 +70,6 @@ library
       base ==4.6.*
     , explicit-exception ==0.1.*
     , parsec ==3.1.*
+    , pretty ==1.0.*
     , time ==1.4.*
   
