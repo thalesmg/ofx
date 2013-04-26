@@ -1,0 +1,6 @@
+This contains a Haskell library to parse Open Financial Exchange (OFX)
+files. It was written to work with Penny, which is available at
+
+http://massysett.github.com/penny
+
+but it is general so many other users might also find it handy.
