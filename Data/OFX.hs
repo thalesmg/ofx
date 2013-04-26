@@ -4,10 +4,10 @@
 -- This parser was written based on the OFX version 1.03
 -- specification, which is available at
 --
--- http://www.ofx.net
+-- <http://www.ofx.net>
 --
 -- It will probably work on earlier versions of OFX without
--- incident. However, it likely will not work on newer versions of
+-- incident. However, it may or may not not work on newer versions of
 -- OFX, which are XML based (this version of OFX is SGML based.)
 --
 -- It will also parse QFX files, which are OFX files with minor
@@ -19,9 +19,110 @@
 -- parser handles the OFX headers and the OFX data.
 --
 -- The parser in this module simply parses the tags and data into a
--- tree, which you can manipulate with other functions.
+-- tree, which you can manipulate with other functions. Some functions
+-- are provided to find the transactions in the tree and place them
+-- into a 'Transaction' type, which is the data you are most likely
+-- interested in. If you are interested in other data you can query
+-- the 'Tag' tree for what you need.
+--
+-- For example, to read in the filename given on the command line and
+-- parse it and print it nicely:
+--
+-- > import System.Environment
+-- > import Text.Parsec
+-- > import Text.PrettyPrint
+-- > import Data.OFX
+-- > import System.IO
+-- > import System.Exit
+-- >
+-- > main :: IO ()
+-- > main = do
+-- >   filename:[] <- getArgs
+-- >   contents <- readFile filename
+-- >   ofx <- case parse ofxFile "" contents of
+-- >     Left e -> do
+-- >       hPutStrLn stderr . show $ e
+-- >       exitFailure
+-- >     Right g -> return g
+-- >   putStrLn . render . pFile $ ofx
+-- >   putStrLn
+-- >     . render
+-- >     . pExceptional text (pList . map pTransaction)
+-- >     . transactions
+-- >     $ ofx
+-- >   putStrLn . render . pMaybe text . fiName $ ofx
+-- >   putStrLn . render . pMaybe text . accountNumber $ ofx
+--
 
-module Data.OFX where
+module Data.OFX
+  ( -- * The OFX data tree
+    HeaderTag
+  , HeaderValue
+  , OFXHeader(..)
+  , TagName
+  , TagData
+  , Tag(..)
+  , OFXFile(..)
+
+  -- * Manipulating the OFX tag tree
+  , find
+  , findPath
+  , tagData
+  , pathData
+  , findData
+
+  -- * Extracting specific data
+  , fiName
+  , creditCardNumber
+  , bankAccountNumber
+  , accountNumber
+
+  -- * Types to represent specific OFX data
+  , Transaction(..)
+  , transaction
+  , transactions
+  , TrnType(..)
+  , trnType
+  , Payee(..)
+  , payee
+  , CorrectAction(..)
+  , BankAcctTo(..)
+  , bankAcctTo
+  , CCAcctTo(..)
+  , ccAcctTo
+  , AcctType(..)
+  , acctType
+  , CurrencyData(..)
+  , currencyData
+  , Currency(..)
+  , currency
+  , OrigCurrency(..)
+  , origCurrency
+
+  -- * Parsec parsers
+  , ofxFile
+  , newline
+  , escChar
+  , header
+  , openingTag
+  , closingTag
+  , tag
+  , date
+  , time
+  , tzOffset
+
+  -- * Pretty printers
+  , pPayee
+  , pTransaction
+  , pTag
+  , pHeader
+  , pFile
+  , pEither
+  , pMaybe
+  , pList
+  , label
+  , pExceptional
+  ) where
 
 import Control.Applicative
   ( (<$), (<|>), (*>), many, optional,
@@ -32,11 +133,20 @@ import qualified Data.Time as T
   
 import Text.Parsec.String (Parser)
 import Text.Parsec
-  ( lookAhead, char, manyTill, anyChar, (<?>), eof, string,
-    try, digit, many1 )
+  ( lookAhead, char, manyTill, anyChar, (<?>), eof,
+    try, digit, many1, spaces )
 import qualified Text.Parsec as P
 import Data.Maybe (listToMaybe)
 import qualified Data.Monoid as M
+import Data.Monoid ((<>), mempty)
+import Text.PrettyPrint
+  ( Doc, hang, text, sep, vcat, nest, (<+>), ($$),
+    parens, brackets )
+
+
+--
+-- Data types
+--
 
 -- | Headers consists of simple @tag:value@ pairs; this represents the
 -- tag.
@@ -48,7 +158,7 @@ type HeaderValue = String
 -- | An OFX file starts with a number of headers, which take the form
 -- @tag:value@ followed by a newline. These are followed by a blank
 -- line.
-data OfxHeader = OfxHeader HeaderTag HeaderValue
+data OFXHeader = OFXHeader HeaderTag HeaderValue
   deriving (Eq, Show)
 
 -- | The name of an OFX tag
@@ -65,8 +175,8 @@ data Tag = Tag TagName (Either TagData [Tag])
   deriving (Eq, Show)
 
 -- | All the data from an OFX file.
-data OfxFile = OfxFile
-  { fHeader :: [OfxHeader]
+data OFXFile = OFXFile
+  { fHeader :: [OFXHeader]
 
   , fTag :: Tag
   -- ^ All the data will be contained in a root tag with the TagName
@@ -78,13 +188,17 @@ data OfxFile = OfxFile
 -- Parsers
 --
 
--- | Parses either a UNIX or an MS-DOS newline.
+-- | Parses either a UNIX or an MS-DOS newline. According to 1.2.2,
+-- OFX does not contain any white space between tags. However, since I
+-- have seen OFX files that do have whitespace between tags, the
+-- parser makes allowance for this.
 newline :: Parser ()
 newline = () <$ char '\n' <|> () <$ (char '\r' *> char '\n')
           <?> "newline"
 
--- | Parses a character, possibly with an escape sequence. @<@, @>@,
--- and @&@ must be entered with escape sequences.
+-- | Parses a character, possibly with an escape sequence. The
+-- greater-than sign, less-than sign, and ampersand must be entered
+-- with escape sequences.
 escChar :: Parser Char
 escChar =
   do
@@ -101,57 +215,75 @@ escChar =
       _ -> return c
   <?> "character"
 
-header :: Parser OfxHeader
+header :: Parser OFXHeader
 header
-  = OfxHeader
+  = OFXHeader
   <$> manyTill anyChar (char ':')
   <*  optional (many (char ' '))
   <*> manyTill anyChar newline
   <?> "OFX header"
   
+-- | Parses any opening tag. Returns the name of the tag.
+openingTag :: Parser TagName
+openingTag =
+  do
+    _ <- char '<'
+    cs <- manyTill escChar (char '>')
+    case cs of
+      [] -> fail "opening tag with empty name"
+      x:_ ->
+        if x == '/'
+        then fail "this is a closing tag"
+        else return cs
+  <?> "opening tag"
+
+-- | Parses a closing tag with the given name.
+closingTag :: TagName -> Parser ()
+closingTag n =
+  do
+    _ <- char '<'
+    _ <- char '/'
+    cs <- manyTill escChar (char '>')
+    if cs == n
+      then return ()
+      else fail $ "expecting closing tag named " ++ n
+                  ++ "; saw closing tag named " ++ cs
+  <?> "closing tag named " ++ n
+
 -- | Parses any tag. The tag itself must be followed by at least one
 -- character: either the next tag if this is an aggregate tag, or the
 -- data if this is a data tag. OFX does not allow empty tags.
 --
 -- The OFX spec seems to say that OFX files do not include trailing
 -- newlines after tags or data, but I have seen these newlines in QFX
--- files, so this parses optional trailing newlines.
+-- files, so this parses optional trailing newlines and spaces.
 tag :: Parser Tag
 tag =
   do
-    _ <- char '<'
-    n <- escChar
-    case n of
-      '/' -> fail "this is a closing tag"
-      x -> inner x
+    -- try is needed because openingTag will overlap with closingTag
+    n <- try (openingTag <* spaces)
+    children <- many tag
+    if null children
+      then Tag n . Left
+           <$> manyTill escChar
+                (eof <|> lookAhead (() <$ char '<') <|> newline)
+           <* spaces
+           <* optional (try (closingTag n))
+           <* spaces
+      else Tag n (Right children) <$ spaces <* closingTag n
+                                  <* spaces
   <?> "OFX tag"
-  where
-    inner c =
-      do
-        n <- manyTill escChar (char '>')
-        let name = c:n
-        _ <- optional newline
-        next <- lookAhead anyChar
-        case next of
-          '<' -> do
-            ts <- many (try tag)
-            _ <- string $ "</" ++ name ++ ">"
-            _ <- optional newline
-            return $ Tag name (Right ts)
-          _ -> do
-            v <- manyTill escChar
-                 (eof <|> lookAhead (() <$ char '<') <|> newline)
-            return $ Tag name (Left v)
-      <?> "OFX tag"
+        
 
 -- | Parses an entire OFX file, including headers.
-ofxFile :: Parser OfxFile
+ofxFile :: Parser OFXFile
 ofxFile
-  = OfxFile
+  = OFXFile
   <$> manyTill header newline
   <*> tag
-  <* many newline
+  <* spaces
   <* eof
+  <?> "OFX file"
 
 -- | Parses an OFX date; provides an error message if the parse fails.
 parseDate :: String -> Ex.Exceptional String T.ZonedTime
@@ -240,6 +372,7 @@ tzOffset =
 --
 -- Manipulating trees of tags
 --
+
 -- | Finds child tags with the given name. When a tag is found, that
 -- tag is not searched for further children with the same name.
 find :: TagName -> Tag -> [Tag]
@@ -270,33 +403,33 @@ tagData (Tag _ ei) = either return (const Nothing) ei
 -- requested data, if the tag is present and it is a data tag.  For
 -- example, to get the name of the financial institution:
 --
--- pathData ["SIGNONMSGSRSV1", "SONRS", "FI", "ORG"] f
-pathData :: [TagName] -> OfxFile -> Maybe TagData
-pathData p (OfxFile _ t) = findPath p t >>= tagData
+-- > pathData ["SIGNONMSGSRSV1", "SONRS", "FI", "ORG"] f
+pathData :: [TagName] -> OFXFile -> Maybe TagData
+pathData p (OFXFile _ t) = findPath p t >>= tagData
 
 
 -- | Gets the name of the financial institution from the FI tag, if
 -- available. The OFX spec does not require this tag to be present.
-fiName :: OfxFile -> Maybe TagData
+fiName :: OFXFile -> Maybe TagData
 fiName = pathData ["SIGNONMSGSRSV1", "SONRS", "FI", "ORG"]
 
 
 -- | Gets the credit card number, if available. The OFX spec does not
 -- require this tag to be present.
-creditCardNumber :: OfxFile -> Maybe TagData
+creditCardNumber :: OFXFile -> Maybe TagData
 creditCardNumber =
   pathData [ "CREDITCARDMSGSRSV1", "CCSTMTTRNRS", "CCSTMTRS",
              "CCACCTFROM", "ACCTID" ]
 
 -- | Gets the bank account number, if available. The OFX spec does not
 -- require this tag to be present.
-bankAccountNumber :: OfxFile -> Maybe TagData
+bankAccountNumber :: OFXFile -> Maybe TagData
 bankAccountNumber =
   pathData [ "BANKMSGSRSV1", "STMTTRNRS", "STMTRS",
              "BANKACCTFROM", "ACCTID" ]
 
 -- | Gets either the credit card or bank account number, if available.
-accountNumber :: OfxFile -> Maybe TagData
+accountNumber :: OFXFile -> Maybe TagData
 accountNumber f = creditCardNumber f <|> bankAccountNumber f
   
 
@@ -396,15 +529,21 @@ data Transaction = Transaction
     -- Typically negative amounts:
     --
     -- * Investment buy amount, investment sell quantity
+    --
     -- * Bank statement debit amounts, checks, fees
+    --
     -- * Credit card purchases
+    --
     -- * Margin balance (unless the institution owes the client money)
     --
     -- Typically positive amounts:
     --
     -- * Investment sell amount, investment buy quantity
+    --
     -- * Bank statement credits
+    --
     -- * Credit card payments
+    --
     -- * Ledger balance (unless the account is overdrawn)
     --
     -- Formats for amounts are described in 3.2.9.1. If there is no
@@ -720,5 +859,94 @@ safeRead s = case reads s of
 -- library.) In case of the former, you can manually parse the
 -- transaction information yourself using functions like
 -- 'pathData'. In case of the latter, please send bugreports :-)
-transactions :: OfxFile -> Ex.Exceptional String [Transaction]
+transactions :: OFXFile -> Ex.Exceptional String [Transaction]
 transactions = mapM transaction . find "STMTTRN" . fTag
+
+--
+-- Pretty printers
+--
+pPayee :: Payee -> Doc
+pPayee p = hang "Payee:" 2 ls
+  where
+    ls = sep [ label "Name" (text . peNAME $ p)
+             , label "Addr1" (text . peADDR1 $ p)
+             , label "Addr2" (pMaybe text . peADDR2 $ p)
+             , label "Addr3" (pMaybe text . peADDR3 $ p)
+             , label "City" (text . peCITY $ p)
+             , label "State" (text . peSTATE $ p)
+             , label "Postal" (text . pePOSTALCODE $ p)
+             , label "Country" (pMaybe text . peCOUNTRY $ p)
+             , label "Phone" (text . pePHONE $ p)
+             ]
+
+pTransaction :: Transaction -> Doc
+pTransaction a = hang "Transaction:" 2 ls
+  where
+    ls = sep [ label "TRNTYPE" (text . show . txTRNTYPE $ a)
+             , label "DTPOSTED" (text . show . txDTPOSTED $ a)
+             , label "DTUSER" (text . show . txDTUSER $ a)
+             , label "DTAVAIL" (text . show . txDTAVAIL $ a)
+             , label "TRNAMT" (text . txTRNAMT $ a)
+             , label "FITID" (text . txFITID $ a)
+             , label "CORRECTFITID"
+               (pMaybe text . txCORRECTFITID $ a)
+             , label "CORRECTACTION"
+               (text . show . txCORRECTACTION $ a)
+             , label "SRVRTID" (pMaybe text . txSRVRTID $ a)
+             , label "CHECKNUM" (pMaybe text . txCHECKNUM $ a)
+             , label "REFNUM" (pMaybe text . txREFNUM $ a)
+             , label "SIC" (pMaybe text . txSIC $ a)
+             , label "PAYEEID" (pMaybe text . txPAYEEID $ a)
+             , label "PAYEEINFO"
+               (pMaybe (pEither text (text . show)) . txPayeeInfo $ a)
+             , label "ACCOUNTTO"
+               (pMaybe id . fmap (text . show)
+                          . txAccountTo $ a)
+             , label "MEMO" (pMaybe text . txMEMO $ a)
+             , label "CURRENCY"
+               (pMaybe (text . show) . txCurrency $ a)
+             ]
+
+pTag :: Tag -> Doc
+pTag (Tag n ei) = case ei of
+  Left d -> "<" <> text n <> ">" <> text d
+  Right ts -> vcat $ "<" <> text n <> ">"
+                   : map (nest 2 . pTag) ts
+                   ++ ["</" <> text n <> ">"]
+
+pHeader :: OFXHeader -> Doc
+pHeader (OFXHeader t v) = text t <> ": " <> text v
+
+pFile :: OFXFile -> Doc
+pFile (OFXFile hs t)
+  = "OFX file:"
+  $$ nest 2 (vcat [ pList . map pHeader $ hs
+                   , mempty
+                   , pTag t ])
+
+pEither :: (a -> Doc) -> (b -> Doc) -> Either a b -> Doc
+pEither fa fb = either (\l -> "Left" <+> parens (fa l))
+                       (\r -> "Right" <+> parens (fb r))
+
+pMaybe :: (a -> Doc) -> Maybe a -> Doc
+pMaybe f = maybe "Nothing" (\x -> "Just" <+> parens (f x))
+
+pList :: [Doc] -> Doc
+pList ds = case ds of
+  [] -> "[]"
+  x:[] -> brackets x
+  x:xs -> sep $ hang "[" 2 x
+              : map (\d -> hang "," 2 d) xs
+              ++ [ "]" ]
+
+label :: String -> Doc -> Doc
+label s = hang (text (s ++ ":")) (length s + 2)
+
+pExceptional
+  :: (e -> Doc)
+  -> (a -> Doc)
+  -> Ex.Exceptional e a
+  -> Doc
+pExceptional fe fa =
+  Ex.switch (\e -> hang "Exception:" 2 $ parens (fe e))
+            (\g -> hang "Success:" 2 $ parens (fa g))

@@ -17,17 +17,31 @@ synopsis:            Parser for OFX data
 
 -- A longer description of the package.
 description:
+
   A parser for Open Financial Exchange (OFX) financial data. This
   handles OFX version 1.03, which is documented at http://www.ofx.net
   This also handles QFX, which is OFX plus some minor additions made
   by Intuit, the publishers of Quicken.
+
   .
-  This package does not support all of OFX. It is intended to be used
-  by programs that will be importing data that has been transmitted by
-  financial institutions--e.g. downloaded bank statements, credit card
-  statements, etc.
+
+  The parser will place all the data into a tree, which you can query
+  for whatever data you may need, although you will need to be
+  familiar with the OFX spec to do this. There is also a Transaction
+  type which you can easily parse from the tree; this will contain
+  most, if not all, of the data you will be interested in if your OFX
+  file is from a bank or credit card account.
+
   .
-  OFX is primarily SGML based.
+
+  All the OFX and QFX files I have seen use the format from the 1.0
+  series of OFX, which is primarily SGML based. OFX version 2 is XML
+  based. If this parser works on those files, consider it a happy
+  accident.
+
+  .
+
+  The OFX spec is available at <http://www.ofx.net>
 
 -- URL for the project homepage or repository.
 homepage:            http://www.github.com/massysett/ofx
@@ -56,9 +70,14 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 
+source-repository head
+  type: git
+  location: git://github.com/massysett/ofx.git
+
 library
   -- Modules exported by the library.
   ghc-options: -Wall
+
   exposed-modules:
       Data.OFX
   
@@ -70,5 +89,6 @@ library
       base ==4.6.*
     , explicit-exception ==0.1.*
     , parsec ==3.1.*
+    , pretty ==1.1.*
     , time ==1.4.*
   
