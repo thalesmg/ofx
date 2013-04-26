@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances, OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
 -- | Parser for downloaded OFX files.
 --
 -- This parser was written based on the OFX version 1.03
@@ -35,8 +35,6 @@ import Text.Parsec
   ( lookAhead, char, manyTill, anyChar, (<?>), eof, string,
     try, digit, many1 )
 import qualified Text.Parsec as P
-import qualified Text.PrettyPrint as PP
-import Text.PrettyPrint (text, hang, (<+>), sep)
 import Data.Maybe (listToMaybe)
 import qualified Data.Monoid as M
 
@@ -251,6 +249,57 @@ find n t@(Tag x p)
       Left _ -> []
       Right ts -> concatMap (find n) ts
 
+-- | Descends through a tree of tags to find a tag at a specific
+-- location in the tree. Fails if any part of the search fails. For
+-- example, to find the financial institution ORG tag, where @t@ is
+-- the root @OFX@ tag:
+--
+-- > findPath ["SIGNONMSGSRSV1", "SONRS", "FI", "ORG"] t
+
+findPath :: [TagName] -> Tag -> Maybe Tag
+findPath [] t = Just t
+findPath (n:ns) t = case listToMaybe (find n t) of
+  Nothing -> Nothing
+  Just r -> findPath ns r
+
+-- | Gets the data from a tag, if it is a tag with data.
+tagData :: Tag -> Maybe TagData
+tagData (Tag _ ei) = either return (const Nothing) ei
+
+-- | Goes to a certain path in the tag hierarchy and pulls the
+-- requested data, if the tag is present and it is a data tag.  For
+-- example, to get the name of the financial institution:
+--
+-- pathData ["SIGNONMSGSRSV1", "SONRS", "FI", "ORG"] f
+pathData :: [TagName] -> OfxFile -> Maybe TagData
+pathData p (OfxFile _ t) = findPath p t >>= tagData
+
+
+-- | Gets the name of the financial institution from the FI tag, if
+-- available. The OFX spec does not require this tag to be present.
+fiName :: OfxFile -> Maybe TagData
+fiName = pathData ["SIGNONMSGSRSV1", "SONRS", "FI", "ORG"]
+
+
+-- | Gets the credit card number, if available. The OFX spec does not
+-- require this tag to be present.
+creditCardNumber :: OfxFile -> Maybe TagData
+creditCardNumber =
+  pathData [ "CREDITCARDMSGSRSV1", "CCSTMTTRNRS", "CCSTMTRS",
+             "CCACCTFROM", "ACCTID" ]
+
+-- | Gets the bank account number, if available. The OFX spec does not
+-- require this tag to be present.
+bankAccountNumber :: OfxFile -> Maybe TagData
+bankAccountNumber =
+  pathData [ "BANKMSGSRSV1", "STMTTRNRS", "STMTRS",
+             "BANKACCTFROM", "ACCTID" ]
+
+-- | Gets either the credit card or bank account number, if available.
+accountNumber :: OfxFile -> Maybe TagData
+accountNumber f = creditCardNumber f <|> bankAccountNumber f
+  
+
 -- | Finds the first tag (either this tag or any children) that has
 -- the given name and that is a data tag (not an aggregate tag.) If no
 -- data tag with the given name is found, returns Nothing.
@@ -421,79 +470,6 @@ data Transaction = Transaction
     -- ^ Currency option. OFX spec says to choose either CURRENCY or
     -- ORIGCURRENCY.
     } deriving (Show)
-
-class Pretty a where
-  pretty :: a -> PP.Doc
-
-instance Pretty TrnType where
-  pretty = text . show
-
-instance Pretty CorrectAction where
-  pretty = text . show
-
-instance Pretty CCAcctTo where
-  pretty = text . show
-
-instance Pretty BankAcctTo where
-  pretty = text . show
-
-instance Pretty OrigCurrency where
-  pretty = text . show
-
-instance Pretty Currency where
-  pretty = text . show
-
-instance Pretty Payee where
-  pretty a = hang "Payee" 1 ls
-    where
-      ls = sep  [ "Name:" <+> pretty (peNAME a)
-                , "Addr1:" <+> pretty (peADDR1 a)
-                , "Addr2:" <+> pretty (peADDR2 a)
-                , "Addr3:" <+> pretty (peADDR3 a)
-                , "City:" <+> pretty (peCITY a)
-                , "State:" <+> pretty (peSTATE a)
-                , "Postal:" <+> pretty (pePOSTALCODE a)
-                , "Country:" <+> pretty (peCOUNTRY a)
-                , "Phone:" <+> pretty (pePHONE a) ]
-
-instance Pretty Transaction where
-  pretty a = hang "Transaction" 1 ls
-    where
-      ls = sep [ "TRNTYPE:" <+> pretty (txTRNTYPE a)
-               , "DTPOSTED:" <+> pretty (txDTPOSTED a)
-               , "DTUSER:" <+> pretty (txDTUSER a)
-               , "DTAVAIL:" <+> pretty (txDTAVAIL a)
-               , "TRNAMT:" <+> pretty (txTRNAMT a)
-               , "FITID:" <+> pretty (txFITID a)
-               , "CORRECTFITID:" <+> pretty (txCORRECTFITID a)
-               , "CORRECTACTION:" <+> pretty (txCORRECTACTION a)
-               , "SRVRTID:" <+> pretty (txSRVRTID a)
-               , "CHECKNUM:" <+> pretty (txCHECKNUM a)
-               , "REFNUM:" <+> pretty (txREFNUM a)
-               , "SIC:" <+> pretty (txSIC a)
-               , "PAYEEID:" <+> pretty (txPAYEEID a)
-               , "PAYEEINFO:" <+> pretty (txPayeeInfo a)
-               , "ACCOUNTTO:" <+> pretty (txAccountTo a)
-               , "MEMO:" <+> pretty (txMEMO a)
-               , "CURRENCY:" <+> pretty (txCurrency a)
-               ]
-
-instance Pretty [Char] where
-  pretty = text
-
-instance Pretty a => Pretty (Maybe a) where
-  pretty a = case a of
-    Nothing -> "Nothing"
-    Just x -> "Just" <+> pretty x
-
-instance (Pretty a, Pretty b) => Pretty (Either a b) where
-  pretty a = case a of
-    Left l -> "Left" <+> pretty l
-    Right r -> "Right" <+> pretty r
-
-instance Pretty T.ZonedTime where
-  pretty = text . show
-
 
 data Payee = Payee
   { peNAME :: String
@@ -739,6 +715,10 @@ safeRead s = case reads s of
   _ -> Nothing
 
 
--- | Pulls all STMTTRN tags from a file.
-transactions :: Tag -> [Tag]
-transactions = find "STMTTRN"
+-- | Pulls all Transactions from a file. Might fail if the OFX file
+-- does not conform to the specification (or if there are bugs in this
+-- library.) In case of the former, you can manually parse the
+-- transaction information yourself using functions like
+-- 'pathData'. In case of the latter, please send bugreports :-)
+transactions :: OfxFile -> Ex.Exceptional String [Transaction]
+transactions = mapM transaction . find "STMTTRN" . fTag
