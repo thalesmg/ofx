@@ -39,7 +39,7 @@
 -- > main = do
 -- >   filename:[] <- getArgs
 -- >   contents <- readFile filename
--- >   ofx <- case parse ofxFile "" contents of
+-- >   ofx <- case parse ofxFile filename contents of
 -- >     Left e -> do
 -- >       hPutStrLn stderr . show $ e
 -- >       exitFailure
