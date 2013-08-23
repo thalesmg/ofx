@@ -213,6 +213,14 @@ newline = () <$ char '\n' <|> () <$ (char '\r' *> char '\n')
 -- | Parses a character, possibly with an escape sequence. The
 -- greater-than sign, less-than sign, and ampersand must be entered
 -- with escape sequences.
+--
+-- According to OFX spec section 2.3.2.1, ampersands, less-than signs,
+-- and greater-than signs must appear as entities.  However some banks
+-- deliver broken OFX files that do not use entities for ampersands
+-- (and possibly for less-than or greater-than signs too, although I
+-- have not yet observed such behavior.) There is now an error message
+-- that reflects this problem.  Client code can filter the OFX data
+-- for known offenders before passing it to this library.
 escChar :: Parser Char
 escChar =
   do
