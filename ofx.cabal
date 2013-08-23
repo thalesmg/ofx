@@ -10,7 +10,7 @@ name:                ofx
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.2.0.0
+version:             0.3.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Parser for OFX data
@@ -87,7 +87,6 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
       base ==4.6.*
-    , explicit-exception ==0.1.*
     , parsec ==3.1.*
     , pretty ==1.1.*
     , time ==1.4.*

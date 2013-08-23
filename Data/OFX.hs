@@ -55,8 +55,11 @@
 --
 
 module Data.OFX
-  ( -- * The OFX data tree
-    HeaderTag
+  ( -- * Error handling
+    Err
+  
+    -- * The OFX data tree
+  , HeaderTag
   , HeaderValue
   , OFXHeader(..)
   , TagName
@@ -124,17 +127,20 @@ module Data.OFX
   , pExceptional
   ) where
 
+--
+-- # Imports
+--
+
 import Control.Applicative
   ( (<$), (<|>), (*>), many, optional,
     (<$>), (<*), (<*>), pure )
 import Control.Monad (replicateM)
-import qualified Control.Monad.Exception.Synchronous as Ex
 import qualified Data.Time as T
   
 import Text.Parsec.String (Parser)
 import Text.Parsec
   ( lookAhead, char, manyTill, anyChar, (<?>), eof,
-    try, digit, many1, spaces )
+    try, digit, many1, spaces, string, choice )
 import qualified Text.Parsec as P
 import Data.Maybe (listToMaybe)
 import qualified Data.Monoid as M
@@ -145,7 +151,15 @@ import Text.PrettyPrint
 
 
 --
--- Data types
+-- # Error handling
+--
+
+-- | Error handling. Errors are indicated with a Left String;
+-- successes with a Right.
+type Err = Either String
+
+--
+-- # Data types
 --
 
 -- | Headers consists of simple @tag:value@ pairs; this represents the
@@ -185,7 +199,7 @@ data OFXFile = OFXFile
   } deriving (Eq, Show)
 
 --
--- Parsers
+-- # Parsers
 --
 
 -- | Parses either a UNIX or an MS-DOS newline. According to 1.2.2,
@@ -205,13 +219,15 @@ escChar =
     c <- anyChar
     case c of
       '&' -> do
-        cs <- manyTill anyChar (char ';')
-        case cs of
-          "lt" -> return '<'
-          "gt" -> return '>'
-          "amp" -> return '&'
-          _ -> fail $ "unrecognized esacpe sequence: \"&"
-                      ++ cs ++ ";\""
+        let mkParser (ch, str) = try (ch <$ string str)
+        ent <- choice (map mkParser
+                [('<', "lt"), ('>', "gt"), ('&', "amp")])
+                <?> ( "entity (\"lt\", \"gt\", or \"amp\")\n"
+                      ++ "some banks create broken OFX files. Try\n"
+                      ++ "removing the ampersands from the file and\n"
+                      ++ "trying again.")
+        _ <- char ';'
+        return ent
       _ -> return c
   <?> "character"
 
@@ -286,9 +302,9 @@ ofxFile
   <?> "OFX file"
 
 -- | Parses an OFX date; provides an error message if the parse fails.
-parseDate :: String -> Ex.Exceptional String T.ZonedTime
+parseDate :: String -> Err T.ZonedTime
 parseDate s = case P.parse date "" s of
-  Left e -> Ex.throw $ "could not parse date: " ++ s ++ ": "
+  Left e -> Left $ "could not parse date: " ++ s ++ ": "
             ++ show e
   Right g -> return g
 
@@ -370,7 +386,7 @@ tzOffset =
         Just _ -> return negate
 
 --
--- Manipulating trees of tags
+-- # Manipulating trees of tags
 --
 
 -- | Finds child tags with the given name. When a tag is found, that
@@ -446,14 +462,14 @@ findData n (Tag tn e) = case e of
 -- | Finds the first tag (either this tag or any children) that has
 -- the given name and that is a data tag. Gives an error message if
 -- the tag is not found.
-required :: TagName -> Tag -> Ex.Exceptional String TagData
+required :: TagName -> Tag -> Err TagData
 required n t = case findData n t of
-  Nothing -> Ex.throw $ "required tag missing: " ++ n
+  Nothing -> Left $ "required tag missing: " ++ n
   Just r -> return r
 
 
 --
--- OFX data
+-- # OFX data
 -- 
 
 -- | OFX transaction types. These are used in STMTTRN aggregates, see
@@ -664,13 +680,13 @@ data AcctType
   | ACREDITLINE
   deriving (Eq, Show, Ord)
 
-acctType :: String -> Ex.Exceptional String AcctType
+acctType :: String -> Err AcctType
 acctType s
   | s == "CHECKING" = return ACHECKING
   | s == "SAVINGS" = return ASAVINGS
   | s == "MONEYMRKT" = return AMONEYMRKT
   | s == "CREDITLINE" = return ACREDITLINE
-  | otherwise = Ex.throw $ "unrecognized account type: " ++ s
+  | otherwise = Left $ "unrecognized account type: " ++ s
 
 -- | Holds all data both for CURRENCY and for ORIGCURRENCY.
 data CurrencyData = CurrencyData
@@ -689,7 +705,7 @@ data OrigCurrency = OrigCurrency CurrencyData
   deriving (Eq, Show)
 
 --
--- Helpers to build aggregates
+-- # Helpers to build aggregates
 --
 trnType :: TagData -> Maybe TrnType
 trnType d = case d of
@@ -712,13 +728,15 @@ trnType d = case d of
   "OTHER" -> Just TOTHER
   _ -> Nothing
 
+
 -- | Gets a single Transaction from a tag. The tag should be the one
 -- named STMTTRN. Fails with an error message if any required field
 -- was not present.
-transaction :: Tag -> Ex.Exceptional String Transaction
+transaction :: Tag -> Err Transaction
 transaction t = do
+  let fromMaybe e = maybe (Left e) Right
   trntyStr <- required "TRNTYPE" t
-  trnTy <- Ex.fromMaybe ("could not parse transaction type: " ++ trntyStr)
+  trnTy <- fromMaybe ("could not parse transaction type: " ++ trntyStr)
            $ trnType trntyStr
 
   dtpStr <- required "DTPOSTED" t
@@ -738,7 +756,7 @@ transaction t = do
       Nothing -> return Nothing
       Just d -> 
         maybe (return Nothing)
-          (Ex.fromMaybe ("could not parse correct action: " ++ d))
+          (fromMaybe ("could not parse correct action: " ++ d))
         . safeRead
         $ d
   let srvrtid = findData "SRVRTID" t
@@ -785,10 +803,10 @@ payee
   -- ^ The tag which contains the PAYEE tag, if there is one. This
   -- would typically be a STMTTRN tag.
 
-  -> Maybe (Ex.Exceptional String Payee)
+  -> Maybe (Err Payee)
   -- ^ Nothing if there is no PAYEE tag. Just if a PAYEE tag is found,
-  -- with an Exception if the tag is lacking a required element, or a
-  -- Success if the tag is successfully parsed.
+  -- with a Left if the tag is lacking a required element, or a
+  -- Right if the tag is successfully parsed.
   --
   -- If there is more than one PAYEE tag, only the first one is
   -- considered.
@@ -806,14 +824,14 @@ payee = fmap getPayee . listToMaybe . find "PAYEE"
       <*> required "PHONE" t
   
 
-currency :: Tag -> Maybe (Ex.Exceptional String Currency)
+currency :: Tag -> Maybe (Err Currency)
 currency
   = fmap (fmap Currency)
   . fmap currencyData
   . listToMaybe
   . find "CURRENCY"
 
-origCurrency :: Tag -> Maybe (Ex.Exceptional String OrigCurrency)
+origCurrency :: Tag -> Maybe (Err OrigCurrency)
 origCurrency
   = fmap (fmap OrigCurrency)
   . fmap currencyData
@@ -826,12 +844,12 @@ currencyData
   :: Tag
   -- ^ The tag that contains the data, e.g. CURRENCY or ORIGCURRENCY.
 
-  -> Ex.Exceptional String CurrencyData
+  -> Err CurrencyData
 currencyData t = CurrencyData
   <$> required "CURRATE" t
   <*> required "CURSYM" t
 
-bankAcctTo :: Tag -> Maybe (Ex.Exceptional String BankAcctTo)
+bankAcctTo :: Tag -> Maybe (Err BankAcctTo)
 bankAcctTo = fmap getTo . listToMaybe . find "BANKACCTTO"
   where
     getTo t = BankAcctTo
@@ -841,7 +859,7 @@ bankAcctTo = fmap getTo . listToMaybe . find "BANKACCTTO"
       <*> (required "ACCTTYPE" t >>= acctType)
       <*> pure (findData "ACCTKEY" t)
 
-ccAcctTo :: Tag -> Maybe (Ex.Exceptional String CCAcctTo)
+ccAcctTo :: Tag -> Maybe (Err CCAcctTo)
 ccAcctTo = fmap getTo . listToMaybe . find "CCACCTTO"
   where
     getTo t = CCAcctTo
@@ -859,11 +877,11 @@ safeRead s = case reads s of
 -- library.) In case of the former, you can manually parse the
 -- transaction information yourself using functions like
 -- 'pathData'. In case of the latter, please send bugreports :-)
-transactions :: OFXFile -> Ex.Exceptional String [Transaction]
+transactions :: OFXFile -> Err [Transaction]
 transactions = mapM transaction . find "STMTTRN" . fTag
 
 --
--- Pretty printers
+-- # Pretty printers
 --
 pPayee :: Payee -> Doc
 pPayee p = hang "Payee:" 2 ls
@@ -945,8 +963,8 @@ label s = hang (text (s ++ ":")) (length s + 2)
 pExceptional
   :: (e -> Doc)
   -> (a -> Doc)
-  -> Ex.Exceptional e a
+  -> Either e a
   -> Doc
 pExceptional fe fa =
-  Ex.switch (\e -> hang "Exception:" 2 $ parens (fe e))
-            (\g -> hang "Success:" 2 $ parens (fa g))
+  either (\e -> hang "Exception:" 2 $ parens (fe e))
+         (\g -> hang "Success:" 2 $ parens (fa g))
