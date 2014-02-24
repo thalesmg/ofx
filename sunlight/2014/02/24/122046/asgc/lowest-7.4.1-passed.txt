@@ -1,0 +1,1019 @@
+Current time: 2014-02-24 12:20:46.170502 UTC
+ghc-7.4.1 ["--version"] succeeded with exit code 0
+Standard output:
+The Glorious Glasgow Haskell Compilation System, version 7.4.1
+
+Standard error:
+<empty>
+
+ghc-pkg-7.4.1 ["--version"] succeeded with exit code 0
+Standard output:
+GHC package manager version 7.4.1
+
+Standard error:
+<empty>
+
+cabal ["--version"] succeeded with exit code 0
+Standard output:
+cabal-install version 1.18.0.2
+using version 1.18.1.2 of the Cabal library 
+
+Standard error:
+<empty>
+
+ghc-7.4.1 ["--make","-outputdir","/home/massysett/ofx/sunlight-9398","-o","/home/massysett/ofx/sunlight-9398/Setup","Setup.hs"] succeeded with exit code 0
+Standard output:
+[1 of 1] Compiling Main             ( Setup.hs, /home/massysett/ofx/sunlight-9398/Main.o )
+Linking /home/massysett/ofx/sunlight-9398/Setup ...
+
+Standard error:
+<empty>
+
+/home/massysett/ofx/sunlight-9398/Setup ["sdist","--output-directory=/home/massysett/ofx/sunlight-9398/distDeps"] succeeded with exit code 0
+Standard output:
+Building source dist for ofx-0.4.0.2...
+Source directory created: /home/massysett/ofx/sunlight-9398/distDeps
+
+Standard error:
+Warning: Cannot run preprocessors. Run 'configure' command first.
+
+/home/massysett/ofx/sunlight-9398/Setup ["sdist","--output-directory=/home/massysett/ofx/sunlight-9398/distPkg"] succeeded with exit code 0
+Standard output:
+Building source dist for ofx-0.4.0.2...
+Source directory created: /home/massysett/ofx/sunlight-9398/distPkg
+
+Standard error:
+Warning: Cannot run preprocessors. Run 'configure' command first.
+
+ghc-pkg-7.4.1 ["init","/home/massysett/ofx/sunlight-9398/db"] succeeded with exit code 0
+Standard output:
+<empty>
+
+Standard error:
+<empty>
+
+cabal ["install","--verbose=2","--with-compiler=ghc-7.4.1","--with-hc-pkg=ghc-pkg-7.4.1","--prefix=/home/massysett/ofx/sunlight-9398/prefix","--disable-library-profiling","--disable-executable-profiling","--package-db=clear","--package-db=global","--package-db=/home/massysett/ofx/sunlight-9398/db","--enable-tests","--disable-documentation","--only-dependencies","--constraint=base==4.5.0.0","--constraint=parsec==3.1.0","--constraint=pretty==1.1.0.0","--constraint=time==1.4"] succeeded with exit code 0
+Standard output:
+Reading available packages...
+Choosing modular solver.
+Resolving dependencies...
+Ready to install pretty-1.1.0.0
+Ready to install syb-0.4.1
+Ready to install transformers-0.3.0.0
+Waiting for install task to finish...
+Downloading pretty-1.1.0.0...
+Downloaded to
+/home/massysett/.cabal/packages/hackage.haskell.org/pretty/1.1.0.0/pretty-1.1.0.0.tar.gz
+Extracting
+/home/massysett/.cabal/packages/hackage.haskell.org/pretty/1.1.0.0/pretty-1.1.0.0.tar.gz
+to /tmp/pretty-1.1.0.0-9427...
+Updating pretty.cabal with the latest revision from the index.
+Configuring pretty-1.1.0.0...
+Dependency base ==4.5.0.0: using base-4.5.0.0
+'/usr/local/bin/ghc-7.4.1' '--info'
+Using Cabal-1.18.1.2 compiled by ghc-7.6
+Using compiler: ghc-7.4.1
+Using install prefix: /home/massysett/ofx/sunlight-9398/prefix
+Binaries installed in: /home/massysett/ofx/sunlight-9398/prefix/bin
+Libraries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+Private binaries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/libexec
+Data files installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+Documentation installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+Configuration files installed in: /home/massysett/ofx/sunlight-9398/prefix/etc
+No alex found
+Using ar found on system at: /usr/bin/ar
+No c2hs found
+Using cpphs version 1.16 found on system at: /home/massysett/.cabal/bin/cpphs
+No ffihugs found
+Using gcc version 4.7 found on system at: /usr/bin/gcc
+Using ghc version 7.4.1 given by user at: /usr/local/bin/ghc-7.4.1
+Using ghc-pkg version 7.4.1 given by user at: /usr/local/bin/ghc-pkg-7.4.1
+No greencard found
+Using haddock version 2.13.2 found on system at: /usr/local/bin/haddock
+Using happy version 1.19.2 found on system at:
+/home/massysett/.cabal/bin/happy
+No hmake found
+Using hpc version 0.6 found on system at: /usr/local/bin/hpc
+Using hsc2hs version 0.67 found on system at: /usr/local/bin/hsc2hs
+Using hscolour version 1.19 found on system at: /usr/bin/HsColour
+No hugs found
+No jhc found
+Using ld found on system at: /usr/bin/ld
+No lhc found
+No lhc-pkg found
+No nhc98 found
+Using pkg-config version 0.26 found on system at: /usr/bin/pkg-config
+Using ranlib found on system at: /usr/bin/ranlib
+Using strip found on system at: /usr/bin/strip
+Using tar found on system at: /bin/tar
+No uhc found
+Component build order: library
+creating dist/build
+creating dist/build/autogen
+Building pretty-1.1.0.0...
+Preprocessing library pretty-1.1.0.0...
+Building library...
+'/usr/local/bin/ghc-7.4.1' '--info'
+'/usr/local/bin/ghc-7.4.1' '--info'
+creating dist/build
+/usr/local/bin/ghc-7.4.1 --make -fbuilding-cabal-package -O -outputdir dist/build -odir dist/build -hidir dist/build -stubdir dist/build -i -idist/build -i. -idist/build/autogen -Idist/build/autogen -Idist/build -optP-include -optPdist/build/autogen/cabal_macros.h -package-name pretty-1.1.0.0 -hide-all-packages -no-user-package-conf -package-conf /home/massysett/ofx/sunlight-9398/db -package-conf dist/package.conf.inplace -package-id base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e -XHaskell98 Text.PrettyPrint Text.PrettyPrint.HughesPJ
+[1 of 2] Compiling Text.PrettyPrint.HughesPJ ( Text/PrettyPrint/HughesPJ.hs, dist/build/Text/PrettyPrint/HughesPJ.o )
+[2 of 2] Compiling Text.PrettyPrint ( Text/PrettyPrint.hs, dist/build/Text/PrettyPrint.o )
+Linking...
+/usr/bin/ar -r dist/build/libHSpretty-1.1.0.0.a dist/build/Text/PrettyPrint.o dist/build/Text/PrettyPrint/HughesPJ.o
+In-place registering pretty-1.1.0.0...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db' '--package-conf=dist/package.conf.inplace'
+directory dist/doc/html/pretty does exist: False
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1
+creating /home/massysett/ofx/sunlight-9398/prefix/share/doc
+creating /home/massysett/ofx/sunlight-9398/prefix/share
+creating /home/massysett/ofx/sunlight-9398/prefix/share/doc
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+Installing LICENSE to
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0/LICENSE
+Installing library in
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0/Text
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+creating /home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1
+creating /home/massysett/ofx/sunlight-9398/prefix/lib
+creating /home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0/Text
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0/Text/PrettyPrint
+Installing dist/build/Text/PrettyPrint.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0/Text/PrettyPrint.hi
+Installing dist/build/Text/PrettyPrint/HughesPJ.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0/Text/PrettyPrint/HughesPJ.hi
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0
+Installing dist/build/libHSpretty-1.1.0.0.a to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/pretty-1.1.0.0/libHSpretty-1.1.0.0.a
+'/usr/local/bin/ghc-7.4.1' '--abi-hash' '-fbuilding-cabal-package' '-O' '-outputdir' 'dist/build' '-odir' 'dist/build' '-hidir' 'dist/build' '-stubdir' 'dist/build' '-i' '-idist/build' '-i.' '-idist/build/autogen' '-Idist/build/autogen' '-Idist/build' '-optP-include' '-optPdist/build/autogen/cabal_macros.h' '-package-name' 'pretty-1.1.0.0' '-hide-all-packages' '-no-user-package-conf' '-package-conf' '/home/massysett/ofx/sunlight-9398/db' '-package-id' 'base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e' '-XHaskell98' 'Text.PrettyPrint' 'Text.PrettyPrint.HughesPJ'
+Registering pretty-1.1.0.0...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db'
+Installed pretty-1.1.0.0
+Waiting for install task to finish...
+Extracting
+/home/massysett/.cabal/packages/hackage.haskell.org/syb/0.4.1/syb-0.4.1.tar.gz
+to /tmp/syb-0.4.1-9427...
+Updating syb.cabal with the latest revision from the index.
+Configuring syb-0.4.1...
+Dependency base ==4.5.0.0: using base-4.5.0.0
+'/usr/local/bin/ghc-7.4.1' '--info'
+Using Cabal-1.18.1.2 compiled by ghc-7.6
+Using compiler: ghc-7.4.1
+Using install prefix: /home/massysett/ofx/sunlight-9398/prefix
+Binaries installed in: /home/massysett/ofx/sunlight-9398/prefix/bin
+Libraries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1
+Private binaries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/libexec
+Data files installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/x86_64-linux-ghc-7.4.1/syb-0.4.1
+Documentation installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/syb-0.4.1
+Configuration files installed in: /home/massysett/ofx/sunlight-9398/prefix/etc
+No alex found
+Using ar found on system at: /usr/bin/ar
+No c2hs found
+Using cpphs version 1.16 found on system at: /home/massysett/.cabal/bin/cpphs
+No ffihugs found
+Using gcc version 4.7 found on system at: /usr/bin/gcc
+Using ghc version 7.4.1 given by user at: /usr/local/bin/ghc-7.4.1
+Using ghc-pkg version 7.4.1 given by user at: /usr/local/bin/ghc-pkg-7.4.1
+No greencard found
+Using haddock version 2.13.2 found on system at: /usr/local/bin/haddock
+Using happy version 1.19.2 found on system at:
+/home/massysett/.cabal/bin/happy
+No hmake found
+Using hpc version 0.6 found on system at: /usr/local/bin/hpc
+Using hsc2hs version 0.67 found on system at: /usr/local/bin/hsc2hs
+Using hscolour version 1.19 found on system at: /usr/bin/HsColour
+No hugs found
+No jhc found
+Using ld found on system at: /usr/bin/ld
+No lhc found
+No lhc-pkg found
+No nhc98 found
+Using pkg-config version 0.26 found on system at: /usr/bin/pkg-config
+Using ranlib found on system at: /usr/bin/ranlib
+Using strip found on system at: /usr/bin/strip
+Using tar found on system at: /bin/tar
+No uhc found
+Component build order: library
+creating dist/build
+creating dist/build/autogen
+Building syb-0.4.1...
+Preprocessing library syb-0.4.1...
+Building library...
+'/usr/local/bin/ghc-7.4.1' '--info'
+'/usr/local/bin/ghc-7.4.1' '--info'
+creating dist/build
+/usr/local/bin/ghc-7.4.1 --make -fbuilding-cabal-package -O -outputdir dist/build -odir dist/build -hidir dist/build -stubdir dist/build -i -idist/build -isrc -idist/build/autogen -Idist/build/autogen -Idist/build -optP-include -optPdist/build/autogen/cabal_macros.h -package-name syb-0.4.1 -hide-all-packages -no-user-package-conf -package-conf /home/massysett/ofx/sunlight-9398/db -package-conf dist/package.conf.inplace -package-id base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e -XHaskell98 Data.Generics Data.Generics.Basics Data.Generics.Instances Data.Generics.Aliases Data.Generics.Schemes Data.Generics.Text Data.Generics.Twins Data.Generics.Builders Generics.SYB Generics.SYB.Basics Generics.SYB.Instances Generics.SYB.Aliases Generics.SYB.Schemes Generics.SYB.Text Generics.SYB.Twins Generics.SYB.Builders -Wall
+[ 1 of 16] Compiling Data.Generics.Basics ( src/Data/Generics/Basics.hs, dist/build/Data/Generics/Basics.o )
+[ 2 of 16] Compiling Generics.SYB.Basics ( src/Generics/SYB/Basics.hs, dist/build/Generics/SYB/Basics.o )
+[ 3 of 16] Compiling Data.Generics.Instances ( src/Data/Generics/Instances.hs, dist/build/Data/Generics/Instances.o )
+[ 4 of 16] Compiling Generics.SYB.Instances ( src/Generics/SYB/Instances.hs, dist/build/Generics/SYB/Instances.o )
+[ 5 of 16] Compiling Data.Generics.Aliases ( src/Data/Generics/Aliases.hs, dist/build/Data/Generics/Aliases.o )
+[ 6 of 16] Compiling Data.Generics.Schemes ( src/Data/Generics/Schemes.hs, dist/build/Data/Generics/Schemes.o )
+[ 7 of 16] Compiling Generics.SYB.Schemes ( src/Generics/SYB/Schemes.hs, dist/build/Generics/SYB/Schemes.o )
+[ 8 of 16] Compiling Data.Generics.Text ( src/Data/Generics/Text.hs, dist/build/Data/Generics/Text.o )
+[ 9 of 16] Compiling Generics.SYB.Text ( src/Generics/SYB/Text.hs, dist/build/Generics/SYB/Text.o )
+[10 of 16] Compiling Data.Generics.Twins ( src/Data/Generics/Twins.hs, dist/build/Data/Generics/Twins.o )
+[11 of 16] Compiling Generics.SYB.Twins ( src/Generics/SYB/Twins.hs, dist/build/Generics/SYB/Twins.o )
+[12 of 16] Compiling Data.Generics.Builders ( src/Data/Generics/Builders.hs, dist/build/Data/Generics/Builders.o )
+[13 of 16] Compiling Generics.SYB.Builders ( src/Generics/SYB/Builders.hs, dist/build/Generics/SYB/Builders.o )
+[14 of 16] Compiling Generics.SYB.Aliases ( src/Generics/SYB/Aliases.hs, dist/build/Generics/SYB/Aliases.o )
+[15 of 16] Compiling Data.Generics    ( src/Data/Generics.hs, dist/build/Data/Generics.o )
+[16 of 16] Compiling Generics.SYB     ( src/Generics/SYB.hs, dist/build/Generics/SYB.o )
+Linking...
+/usr/bin/ar -r dist/build/libHSsyb-0.4.1.a dist/build/Data/Generics.o dist/build/Data/Generics/Basics.o dist/build/Data/Generics/Instances.o dist/build/Data/Generics/Aliases.o dist/build/Data/Generics/Schemes.o dist/build/Data/Generics/Text.o dist/build/Data/Generics/Twins.o dist/build/Data/Generics/Builders.o dist/build/Generics/SYB.o dist/build/Generics/SYB/Basics.o dist/build/Generics/SYB/Instances.o dist/build/Generics/SYB/Aliases.o dist/build/Generics/SYB/Schemes.o dist/build/Generics/SYB/Text.o dist/build/Generics/SYB/Twins.o dist/build/Generics/SYB/Builders.o
+In-place registering syb-0.4.1...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db' '--package-conf=dist/package.conf.inplace'
+directory dist/doc/html/syb does exist: False
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/syb-0.4.1
+Installing LICENSE to
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/syb-0.4.1/LICENSE
+Installing library in
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB
+Installing dist/build/Data/Generics.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics.hi
+Installing dist/build/Data/Generics/Basics.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics/Basics.hi
+Installing dist/build/Data/Generics/Instances.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics/Instances.hi
+Installing dist/build/Data/Generics/Aliases.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics/Aliases.hi
+Installing dist/build/Data/Generics/Schemes.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics/Schemes.hi
+Installing dist/build/Data/Generics/Text.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics/Text.hi
+Installing dist/build/Data/Generics/Twins.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics/Twins.hi
+Installing dist/build/Data/Generics/Builders.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Data/Generics/Builders.hi
+Installing dist/build/Generics/SYB.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB.hi
+Installing dist/build/Generics/SYB/Basics.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB/Basics.hi
+Installing dist/build/Generics/SYB/Instances.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB/Instances.hi
+Installing dist/build/Generics/SYB/Aliases.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB/Aliases.hi
+Installing dist/build/Generics/SYB/Schemes.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB/Schemes.hi
+Installing dist/build/Generics/SYB/Text.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB/Text.hi
+Installing dist/build/Generics/SYB/Twins.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB/Twins.hi
+Installing dist/build/Generics/SYB/Builders.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/Generics/SYB/Builders.hi
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1
+Installing dist/build/libHSsyb-0.4.1.a to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/syb-0.4.1/libHSsyb-0.4.1.a
+'/usr/local/bin/ghc-7.4.1' '--abi-hash' '-fbuilding-cabal-package' '-O' '-outputdir' 'dist/build' '-odir' 'dist/build' '-hidir' 'dist/build' '-stubdir' 'dist/build' '-i' '-idist/build' '-isrc' '-idist/build/autogen' '-Idist/build/autogen' '-Idist/build' '-optP-include' '-optPdist/build/autogen/cabal_macros.h' '-package-name' 'syb-0.4.1' '-hide-all-packages' '-no-user-package-conf' '-package-conf' '/home/massysett/ofx/sunlight-9398/db' '-package-id' 'base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e' '-XHaskell98' 'Data.Generics' 'Data.Generics.Basics' 'Data.Generics.Instances' 'Data.Generics.Aliases' 'Data.Generics.Schemes' 'Data.Generics.Text' 'Data.Generics.Twins' 'Data.Generics.Builders' 'Generics.SYB' 'Generics.SYB.Basics' 'Generics.SYB.Instances' 'Generics.SYB.Aliases' 'Generics.SYB.Schemes' 'Generics.SYB.Text' 'Generics.SYB.Twins' 'Generics.SYB.Builders' '-Wall'
+Registering syb-0.4.1...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db'
+Installed syb-0.4.1
+Waiting for install task to finish...
+Extracting
+/home/massysett/.cabal/packages/hackage.haskell.org/transformers/0.3.0.0/transformers-0.3.0.0.tar.gz
+to /tmp/transformers-0.3.0.0-9427...
+Updating transformers.cabal with the latest revision from the index.
+Configuring transformers-0.3.0.0...
+Flags chosen: applicativeinbase=True
+Dependency base ==4.5.0.0: using base-4.5.0.0
+'/usr/local/bin/ghc-7.4.1' '--info'
+Using Cabal-1.18.1.2 compiled by ghc-7.6
+Using compiler: ghc-7.4.1
+Using install prefix: /home/massysett/ofx/sunlight-9398/prefix
+Binaries installed in: /home/massysett/ofx/sunlight-9398/prefix/bin
+Libraries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0
+Private binaries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/libexec
+Data files installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0
+Documentation installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0
+Configuration files installed in: /home/massysett/ofx/sunlight-9398/prefix/etc
+No alex found
+Using ar found on system at: /usr/bin/ar
+No c2hs found
+Using cpphs version 1.16 found on system at: /home/massysett/.cabal/bin/cpphs
+No ffihugs found
+Using gcc version 4.7 found on system at: /usr/bin/gcc
+Using ghc version 7.4.1 given by user at: /usr/local/bin/ghc-7.4.1
+Using ghc-pkg version 7.4.1 given by user at: /usr/local/bin/ghc-pkg-7.4.1
+No greencard found
+Using haddock version 2.13.2 found on system at: /usr/local/bin/haddock
+Using happy version 1.19.2 found on system at:
+/home/massysett/.cabal/bin/happy
+No hmake found
+Using hpc version 0.6 found on system at: /usr/local/bin/hpc
+Using hsc2hs version 0.67 found on system at: /usr/local/bin/hsc2hs
+Using hscolour version 1.19 found on system at: /usr/bin/HsColour
+No hugs found
+No jhc found
+Using ld found on system at: /usr/bin/ld
+No lhc found
+No lhc-pkg found
+No nhc98 found
+Using pkg-config version 0.26 found on system at: /usr/bin/pkg-config
+Using ranlib found on system at: /usr/bin/ranlib
+Using strip found on system at: /usr/bin/strip
+Using tar found on system at: /bin/tar
+No uhc found
+Component build order: library
+creating dist/build
+creating dist/build/autogen
+Building transformers-0.3.0.0...
+Preprocessing library transformers-0.3.0.0...
+Building library...
+'/usr/local/bin/ghc-7.4.1' '--info'
+'/usr/local/bin/ghc-7.4.1' '--info'
+creating dist/build
+/usr/local/bin/ghc-7.4.1 --make -fbuilding-cabal-package -O -outputdir dist/build -odir dist/build -hidir dist/build -stubdir dist/build -i -idist/build -i. -idist/build/autogen -Idist/build/autogen -Idist/build -optP-include -optPdist/build/autogen/cabal_macros.h -package-name transformers-0.3.0.0 -hide-all-packages -no-user-package-conf -package-conf /home/massysett/ofx/sunlight-9398/db -package-conf dist/package.conf.inplace -package-id base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e -XHaskell98 Control.Applicative.Backwards Control.Applicative.Lift Control.Monad.IO.Class Control.Monad.Trans.Class Control.Monad.Trans.Cont Control.Monad.Trans.Error Control.Monad.Trans.Identity Control.Monad.Trans.List Control.Monad.Trans.Maybe Control.Monad.Trans.Reader Control.Monad.Trans.RWS Control.Monad.Trans.RWS.Lazy Control.Monad.Trans.RWS.Strict Control.Monad.Trans.State Control.Monad.Trans.State.Lazy Control.Monad.Trans.State.Strict Control.Monad.Trans.Writer Control.Monad.Trans.Writer.Lazy Control.Monad.Trans.Writer.Strict Data.Functor.Compose Data.Functor.Constant Data.Functor.Identity Data.Functor.Product Data.Functor.Reverse
+[ 1 of 24] Compiling Data.Functor.Product ( Data/Functor/Product.hs, dist/build/Data/Functor/Product.o )
+[ 2 of 24] Compiling Data.Functor.Compose ( Data/Functor/Compose.hs, dist/build/Data/Functor/Compose.o )
+[ 3 of 24] Compiling Data.Functor.Identity ( Data/Functor/Identity.hs, dist/build/Data/Functor/Identity.o )
+[ 4 of 24] Compiling Control.Monad.Trans.Class ( Control/Monad/Trans/Class.hs, dist/build/Control/Monad/Trans/Class.o )
+[ 5 of 24] Compiling Control.Monad.IO.Class ( Control/Monad/IO/Class.hs, dist/build/Control/Monad/IO/Class.o )
+[ 6 of 24] Compiling Control.Monad.Trans.Cont ( Control/Monad/Trans/Cont.hs, dist/build/Control/Monad/Trans/Cont.o )
+[ 7 of 24] Compiling Control.Monad.Trans.Error ( Control/Monad/Trans/Error.hs, dist/build/Control/Monad/Trans/Error.o )
+[ 8 of 24] Compiling Control.Monad.Trans.Identity ( Control/Monad/Trans/Identity.hs, dist/build/Control/Monad/Trans/Identity.o )
+[ 9 of 24] Compiling Control.Monad.Trans.List ( Control/Monad/Trans/List.hs, dist/build/Control/Monad/Trans/List.o )
+[10 of 24] Compiling Control.Monad.Trans.Maybe ( Control/Monad/Trans/Maybe.hs, dist/build/Control/Monad/Trans/Maybe.o )
+[11 of 24] Compiling Control.Monad.Trans.Reader ( Control/Monad/Trans/Reader.hs, dist/build/Control/Monad/Trans/Reader.o )
+[12 of 24] Compiling Control.Monad.Trans.RWS.Lazy ( Control/Monad/Trans/RWS/Lazy.hs, dist/build/Control/Monad/Trans/RWS/Lazy.o )
+[13 of 24] Compiling Control.Monad.Trans.RWS ( Control/Monad/Trans/RWS.hs, dist/build/Control/Monad/Trans/RWS.o )
+[14 of 24] Compiling Control.Monad.Trans.RWS.Strict ( Control/Monad/Trans/RWS/Strict.hs, dist/build/Control/Monad/Trans/RWS/Strict.o )
+[15 of 24] Compiling Control.Monad.Trans.State.Lazy ( Control/Monad/Trans/State/Lazy.hs, dist/build/Control/Monad/Trans/State/Lazy.o )
+[16 of 24] Compiling Control.Monad.Trans.State ( Control/Monad/Trans/State.hs, dist/build/Control/Monad/Trans/State.o )
+[17 of 24] Compiling Control.Monad.Trans.State.Strict ( Control/Monad/Trans/State/Strict.hs, dist/build/Control/Monad/Trans/State/Strict.o )
+[18 of 24] Compiling Control.Monad.Trans.Writer.Lazy ( Control/Monad/Trans/Writer/Lazy.hs, dist/build/Control/Monad/Trans/Writer/Lazy.o )
+[19 of 24] Compiling Control.Monad.Trans.Writer ( Control/Monad/Trans/Writer.hs, dist/build/Control/Monad/Trans/Writer.o )
+[20 of 24] Compiling Control.Monad.Trans.Writer.Strict ( Control/Monad/Trans/Writer/Strict.hs, dist/build/Control/Monad/Trans/Writer/Strict.o )
+[21 of 24] Compiling Data.Functor.Constant ( Data/Functor/Constant.hs, dist/build/Data/Functor/Constant.o )
+[22 of 24] Compiling Control.Applicative.Lift ( Control/Applicative/Lift.hs, dist/build/Control/Applicative/Lift.o )
+[23 of 24] Compiling Control.Applicative.Backwards ( Control/Applicative/Backwards.hs, dist/build/Control/Applicative/Backwards.o )
+[24 of 24] Compiling Data.Functor.Reverse ( Data/Functor/Reverse.hs, dist/build/Data/Functor/Reverse.o )
+Linking...
+/usr/bin/ar -r dist/build/libHStransformers-0.3.0.0.a dist/build/Control/Applicative/Backwards.o dist/build/Control/Applicative/Lift.o dist/build/Control/Monad/IO/Class.o dist/build/Control/Monad/Trans/Class.o dist/build/Control/Monad/Trans/Cont.o dist/build/Control/Monad/Trans/Error.o dist/build/Control/Monad/Trans/Identity.o dist/build/Control/Monad/Trans/List.o dist/build/Control/Monad/Trans/Maybe.o dist/build/Control/Monad/Trans/Reader.o dist/build/Control/Monad/Trans/RWS.o dist/build/Control/Monad/Trans/RWS/Lazy.o dist/build/Control/Monad/Trans/RWS/Strict.o dist/build/Control/Monad/Trans/State.o dist/build/Control/Monad/Trans/State/Lazy.o dist/build/Control/Monad/Trans/State/Strict.o dist/build/Control/Monad/Trans/Writer.o dist/build/Control/Monad/Trans/Writer/Lazy.o dist/build/Control/Monad/Trans/Writer/Strict.o dist/build/Data/Functor/Compose.o dist/build/Data/Functor/Constant.o dist/build/Data/Functor/Identity.o dist/build/Data/Functor/Product.o dist/build/Data/Functor/Reverse.o
+In-place registering transformers-0.3.0.0...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db' '--package-conf=dist/package.conf.inplace'
+directory dist/doc/html/transformers does exist: False
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0
+Installing LICENSE to
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/LICENSE
+Installing library in
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Applicative
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Applicative
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/IO
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/IO
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/RWS
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/State
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Writer
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data/Functor
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data/Functor
+Installing dist/build/Control/Applicative/Backwards.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Applicative/Backwards.hi
+Installing dist/build/Control/Applicative/Lift.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Applicative/Lift.hi
+Installing dist/build/Control/Monad/IO/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/IO/Class.hi
+Installing dist/build/Control/Monad/Trans/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Class.hi
+Installing dist/build/Control/Monad/Trans/Cont.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Cont.hi
+Installing dist/build/Control/Monad/Trans/Error.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Error.hi
+Installing dist/build/Control/Monad/Trans/Identity.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Identity.hi
+Installing dist/build/Control/Monad/Trans/List.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/List.hi
+Installing dist/build/Control/Monad/Trans/Maybe.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Maybe.hi
+Installing dist/build/Control/Monad/Trans/Reader.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Reader.hi
+Installing dist/build/Control/Monad/Trans/RWS.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/RWS.hi
+Installing dist/build/Control/Monad/Trans/RWS/Lazy.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/RWS/Lazy.hi
+Installing dist/build/Control/Monad/Trans/RWS/Strict.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/RWS/Strict.hi
+Installing dist/build/Control/Monad/Trans/State.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/State.hi
+Installing dist/build/Control/Monad/Trans/State/Lazy.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/State/Lazy.hi
+Installing dist/build/Control/Monad/Trans/State/Strict.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/State/Strict.hi
+Installing dist/build/Control/Monad/Trans/Writer.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Writer.hi
+Installing dist/build/Control/Monad/Trans/Writer/Lazy.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Writer/Lazy.hi
+Installing dist/build/Control/Monad/Trans/Writer/Strict.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Control/Monad/Trans/Writer/Strict.hi
+Installing dist/build/Data/Functor/Compose.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data/Functor/Compose.hi
+Installing dist/build/Data/Functor/Constant.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data/Functor/Constant.hi
+Installing dist/build/Data/Functor/Identity.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data/Functor/Identity.hi
+Installing dist/build/Data/Functor/Product.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data/Functor/Product.hi
+Installing dist/build/Data/Functor/Reverse.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/Data/Functor/Reverse.hi
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0
+Installing dist/build/libHStransformers-0.3.0.0.a to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/transformers-0.3.0.0/libHStransformers-0.3.0.0.a
+'/usr/local/bin/ghc-7.4.1' '--abi-hash' '-fbuilding-cabal-package' '-O' '-outputdir' 'dist/build' '-odir' 'dist/build' '-hidir' 'dist/build' '-stubdir' 'dist/build' '-i' '-idist/build' '-i.' '-idist/build/autogen' '-Idist/build/autogen' '-Idist/build' '-optP-include' '-optPdist/build/autogen/cabal_macros.h' '-package-name' 'transformers-0.3.0.0' '-hide-all-packages' '-no-user-package-conf' '-package-conf' '/home/massysett/ofx/sunlight-9398/db' '-package-id' 'base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e' '-XHaskell98' 'Control.Applicative.Backwards' 'Control.Applicative.Lift' 'Control.Monad.IO.Class' 'Control.Monad.Trans.Class' 'Control.Monad.Trans.Cont' 'Control.Monad.Trans.Error' 'Control.Monad.Trans.Identity' 'Control.Monad.Trans.List' 'Control.Monad.Trans.Maybe' 'Control.Monad.Trans.Reader' 'Control.Monad.Trans.RWS' 'Control.Monad.Trans.RWS.Lazy' 'Control.Monad.Trans.RWS.Strict' 'Control.Monad.Trans.State' 'Control.Monad.Trans.State.Lazy' 'Control.Monad.Trans.State.Strict' 'Control.Monad.Trans.Writer' 'Control.Monad.Trans.Writer.Lazy' 'Control.Monad.Trans.Writer.Strict' 'Data.Functor.Compose' 'Data.Functor.Constant' 'Data.Functor.Identity' 'Data.Functor.Product' 'Data.Functor.Reverse'
+Registering transformers-0.3.0.0...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db'
+Installed transformers-0.3.0.0
+Ready to install mtl-2.1.2
+Waiting for install task to finish...
+Extracting
+/home/massysett/.cabal/packages/hackage.haskell.org/mtl/2.1.2/mtl-2.1.2.tar.gz
+to /tmp/mtl-2.1.2-9427...
+Updating mtl.cabal with the latest revision from the index.
+Configuring mtl-2.1.2...
+Dependency base ==4.5.0.0: using base-4.5.0.0
+Dependency transformers ==0.3.0.0: using transformers-0.3.0.0
+'/usr/local/bin/ghc-7.4.1' '--info'
+Using Cabal-1.18.1.2 compiled by ghc-7.6
+Using compiler: ghc-7.4.1
+Using install prefix: /home/massysett/ofx/sunlight-9398/prefix
+Binaries installed in: /home/massysett/ofx/sunlight-9398/prefix/bin
+Libraries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2
+Private binaries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/libexec
+Data files installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/x86_64-linux-ghc-7.4.1/mtl-2.1.2
+Documentation installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/mtl-2.1.2
+Configuration files installed in: /home/massysett/ofx/sunlight-9398/prefix/etc
+No alex found
+Using ar found on system at: /usr/bin/ar
+No c2hs found
+Using cpphs version 1.16 found on system at: /home/massysett/.cabal/bin/cpphs
+No ffihugs found
+Using gcc version 4.7 found on system at: /usr/bin/gcc
+Using ghc version 7.4.1 given by user at: /usr/local/bin/ghc-7.4.1
+Using ghc-pkg version 7.4.1 given by user at: /usr/local/bin/ghc-pkg-7.4.1
+No greencard found
+Using haddock version 2.13.2 found on system at: /usr/local/bin/haddock
+Using happy version 1.19.2 found on system at:
+/home/massysett/.cabal/bin/happy
+No hmake found
+Using hpc version 0.6 found on system at: /usr/local/bin/hpc
+Using hsc2hs version 0.67 found on system at: /usr/local/bin/hsc2hs
+Using hscolour version 1.19 found on system at: /usr/bin/HsColour
+No hugs found
+No jhc found
+Using ld found on system at: /usr/bin/ld
+No lhc found
+No lhc-pkg found
+No nhc98 found
+Using pkg-config version 0.26 found on system at: /usr/bin/pkg-config
+Using ranlib found on system at: /usr/bin/ranlib
+Using strip found on system at: /usr/bin/strip
+Using tar found on system at: /bin/tar
+No uhc found
+Component build order: library
+creating dist/build
+creating dist/build/autogen
+Building mtl-2.1.2...
+Preprocessing library mtl-2.1.2...
+Building library...
+'/usr/local/bin/ghc-7.4.1' '--info'
+'/usr/local/bin/ghc-7.4.1' '--info'
+creating dist/build
+/usr/local/bin/ghc-7.4.1 --make -fbuilding-cabal-package -O -outputdir dist/build -odir dist/build -hidir dist/build -stubdir dist/build -i -idist/build -i. -idist/build/autogen -Idist/build/autogen -Idist/build -optP-include -optPdist/build/autogen/cabal_macros.h -package-name mtl-2.1.2 -hide-all-packages -no-user-package-conf -package-conf /home/massysett/ofx/sunlight-9398/db -package-conf dist/package.conf.inplace -package-id base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e -package-id transformers-0.3.0.0-b55e1ba0a2f0da13c35eec50d1253059 -XHaskell98 -XMultiParamTypeClasses -XFunctionalDependencies -XFlexibleInstances Control.Monad.Cont Control.Monad.Cont.Class Control.Monad.Error Control.Monad.Error.Class Control.Monad.Identity Control.Monad.List Control.Monad.RWS Control.Monad.RWS.Class Control.Monad.RWS.Lazy Control.Monad.RWS.Strict Control.Monad.Reader Control.Monad.Reader.Class Control.Monad.State Control.Monad.State.Class Control.Monad.State.Lazy Control.Monad.State.Strict Control.Monad.Trans Control.Monad.Writer Control.Monad.Writer.Class Control.Monad.Writer.Lazy Control.Monad.Writer.Strict -Wall -fno-warn-unused-imports
+[ 1 of 21] Compiling Control.Monad.Writer.Class ( Control/Monad/Writer/Class.hs, dist/build/Control/Monad/Writer/Class.o )
+[ 2 of 21] Compiling Control.Monad.State.Class ( Control/Monad/State/Class.hs, dist/build/Control/Monad/State/Class.o )
+[ 3 of 21] Compiling Control.Monad.Reader.Class ( Control/Monad/Reader/Class.hs, dist/build/Control/Monad/Reader/Class.o )
+[ 4 of 21] Compiling Control.Monad.RWS.Class ( Control/Monad/RWS/Class.hs, dist/build/Control/Monad/RWS/Class.o )
+[ 5 of 21] Compiling Control.Monad.Identity ( Control/Monad/Identity.hs, dist/build/Control/Monad/Identity.o )
+[ 6 of 21] Compiling Control.Monad.Error.Class ( Control/Monad/Error/Class.hs, dist/build/Control/Monad/Error/Class.o )
+[ 7 of 21] Compiling Control.Monad.Cont.Class ( Control/Monad/Cont/Class.hs, dist/build/Control/Monad/Cont/Class.o )
+[ 8 of 21] Compiling Control.Monad.Trans ( Control/Monad/Trans.hs, dist/build/Control/Monad/Trans.o )
+[ 9 of 21] Compiling Control.Monad.Error ( Control/Monad/Error.hs, dist/build/Control/Monad/Error.o )
+[10 of 21] Compiling Control.Monad.List ( Control/Monad/List.hs, dist/build/Control/Monad/List.o )
+[11 of 21] Compiling Control.Monad.RWS.Lazy ( Control/Monad/RWS/Lazy.hs, dist/build/Control/Monad/RWS/Lazy.o )
+[12 of 21] Compiling Control.Monad.RWS ( Control/Monad/RWS.hs, dist/build/Control/Monad/RWS.o )
+[13 of 21] Compiling Control.Monad.Reader ( Control/Monad/Reader.hs, dist/build/Control/Monad/Reader.o )
+[14 of 21] Compiling Control.Monad.RWS.Strict ( Control/Monad/RWS/Strict.hs, dist/build/Control/Monad/RWS/Strict.o )
+[15 of 21] Compiling Control.Monad.State.Lazy ( Control/Monad/State/Lazy.hs, dist/build/Control/Monad/State/Lazy.o )
+[16 of 21] Compiling Control.Monad.State ( Control/Monad/State.hs, dist/build/Control/Monad/State.o )
+[17 of 21] Compiling Control.Monad.State.Strict ( Control/Monad/State/Strict.hs, dist/build/Control/Monad/State/Strict.o )
+[18 of 21] Compiling Control.Monad.Writer.Lazy ( Control/Monad/Writer/Lazy.hs, dist/build/Control/Monad/Writer/Lazy.o )
+[19 of 21] Compiling Control.Monad.Writer ( Control/Monad/Writer.hs, dist/build/Control/Monad/Writer.o )
+[20 of 21] Compiling Control.Monad.Writer.Strict ( Control/Monad/Writer/Strict.hs, dist/build/Control/Monad/Writer/Strict.o )
+[21 of 21] Compiling Control.Monad.Cont ( Control/Monad/Cont.hs, dist/build/Control/Monad/Cont.o )
+Linking...
+/usr/bin/ar -r dist/build/libHSmtl-2.1.2.a dist/build/Control/Monad/Cont.o dist/build/Control/Monad/Cont/Class.o dist/build/Control/Monad/Error.o dist/build/Control/Monad/Error/Class.o dist/build/Control/Monad/Identity.o dist/build/Control/Monad/List.o dist/build/Control/Monad/RWS.o dist/build/Control/Monad/RWS/Class.o dist/build/Control/Monad/RWS/Lazy.o dist/build/Control/Monad/RWS/Strict.o dist/build/Control/Monad/Reader.o dist/build/Control/Monad/Reader/Class.o dist/build/Control/Monad/State.o dist/build/Control/Monad/State/Class.o dist/build/Control/Monad/State/Lazy.o dist/build/Control/Monad/State/Strict.o dist/build/Control/Monad/Trans.o dist/build/Control/Monad/Writer.o dist/build/Control/Monad/Writer/Class.o dist/build/Control/Monad/Writer/Lazy.o dist/build/Control/Monad/Writer/Strict.o
+In-place registering mtl-2.1.2...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db' '--package-conf=dist/package.conf.inplace'
+directory dist/doc/html/mtl does exist: False
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/mtl-2.1.2
+Installing LICENSE to
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/mtl-2.1.2/LICENSE
+Installing library in
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Cont
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Error
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/RWS
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Reader
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/State
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Writer
+Installing dist/build/Control/Monad/Cont.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Cont.hi
+Installing dist/build/Control/Monad/Cont/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Cont/Class.hi
+Installing dist/build/Control/Monad/Error.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Error.hi
+Installing dist/build/Control/Monad/Error/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Error/Class.hi
+Installing dist/build/Control/Monad/Identity.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Identity.hi
+Installing dist/build/Control/Monad/List.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/List.hi
+Installing dist/build/Control/Monad/RWS.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/RWS.hi
+Installing dist/build/Control/Monad/RWS/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/RWS/Class.hi
+Installing dist/build/Control/Monad/RWS/Lazy.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/RWS/Lazy.hi
+Installing dist/build/Control/Monad/RWS/Strict.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/RWS/Strict.hi
+Installing dist/build/Control/Monad/Reader.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Reader.hi
+Installing dist/build/Control/Monad/Reader/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Reader/Class.hi
+Installing dist/build/Control/Monad/State.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/State.hi
+Installing dist/build/Control/Monad/State/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/State/Class.hi
+Installing dist/build/Control/Monad/State/Lazy.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/State/Lazy.hi
+Installing dist/build/Control/Monad/State/Strict.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/State/Strict.hi
+Installing dist/build/Control/Monad/Trans.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Trans.hi
+Installing dist/build/Control/Monad/Writer.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Writer.hi
+Installing dist/build/Control/Monad/Writer/Class.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Writer/Class.hi
+Installing dist/build/Control/Monad/Writer/Lazy.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Writer/Lazy.hi
+Installing dist/build/Control/Monad/Writer/Strict.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/Control/Monad/Writer/Strict.hi
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2
+Installing dist/build/libHSmtl-2.1.2.a to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/mtl-2.1.2/libHSmtl-2.1.2.a
+'/usr/local/bin/ghc-7.4.1' '--abi-hash' '-fbuilding-cabal-package' '-O' '-outputdir' 'dist/build' '-odir' 'dist/build' '-hidir' 'dist/build' '-stubdir' 'dist/build' '-i' '-idist/build' '-i.' '-idist/build/autogen' '-Idist/build/autogen' '-Idist/build' '-optP-include' '-optPdist/build/autogen/cabal_macros.h' '-package-name' 'mtl-2.1.2' '-hide-all-packages' '-no-user-package-conf' '-package-conf' '/home/massysett/ofx/sunlight-9398/db' '-package-id' 'base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e' '-package-id' 'transformers-0.3.0.0-b55e1ba0a2f0da13c35eec50d1253059' '-XHaskell98' '-XMultiParamTypeClasses' '-XFunctionalDependencies' '-XFlexibleInstances' 'Control.Monad.Cont' 'Control.Monad.Cont.Class' 'Control.Monad.Error' 'Control.Monad.Error.Class' 'Control.Monad.Identity' 'Control.Monad.List' 'Control.Monad.RWS' 'Control.Monad.RWS.Class' 'Control.Monad.RWS.Lazy' 'Control.Monad.RWS.Strict' 'Control.Monad.Reader' 'Control.Monad.Reader.Class' 'Control.Monad.State' 'Control.Monad.State.Class' 'Control.Monad.State.Lazy' 'Control.Monad.State.Strict' 'Control.Monad.Trans' 'Control.Monad.Writer' 'Control.Monad.Writer.Class' 'Control.Monad.Writer.Lazy' 'Control.Monad.Writer.Strict' '-Wall' '-fno-warn-unused-imports'
+Registering mtl-2.1.2...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db'
+Installed mtl-2.1.2
+Ready to install parsec-3.1.0
+Waiting for install task to finish...
+Downloading parsec-3.1.0...
+Downloaded to
+/home/massysett/.cabal/packages/hackage.haskell.org/parsec/3.1.0/parsec-3.1.0.tar.gz
+Extracting
+/home/massysett/.cabal/packages/hackage.haskell.org/parsec/3.1.0/parsec-3.1.0.tar.gz
+to /tmp/parsec-3.1.0-9427...
+Updating parsec.cabal with the latest revision from the index.
+Configuring parsec-3.1.0...
+Flags chosen: base4=True
+Dependency base ==4.5.0.0: using base-4.5.0.0
+Dependency bytestring ==0.9.2.1: using bytestring-0.9.2.1
+Dependency mtl ==2.1.2: using mtl-2.1.2
+Dependency syb ==0.4.1: using syb-0.4.1
+'/usr/local/bin/ghc-7.4.1' '--info'
+Using Cabal-1.18.1.2 compiled by ghc-7.6
+Using compiler: ghc-7.4.1
+Using install prefix: /home/massysett/ofx/sunlight-9398/prefix
+Binaries installed in: /home/massysett/ofx/sunlight-9398/prefix/bin
+Libraries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0
+Private binaries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/libexec
+Data files installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/x86_64-linux-ghc-7.4.1/parsec-3.1.0
+Documentation installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/parsec-3.1.0
+Configuration files installed in: /home/massysett/ofx/sunlight-9398/prefix/etc
+No alex found
+Using ar found on system at: /usr/bin/ar
+No c2hs found
+Using cpphs version 1.16 found on system at: /home/massysett/.cabal/bin/cpphs
+No ffihugs found
+Using gcc version 4.7 found on system at: /usr/bin/gcc
+Using ghc version 7.4.1 given by user at: /usr/local/bin/ghc-7.4.1
+Using ghc-pkg version 7.4.1 given by user at: /usr/local/bin/ghc-pkg-7.4.1
+No greencard found
+Using haddock version 2.13.2 found on system at: /usr/local/bin/haddock
+Using happy version 1.19.2 found on system at:
+/home/massysett/.cabal/bin/happy
+No hmake found
+Using hpc version 0.6 found on system at: /usr/local/bin/hpc
+Using hsc2hs version 0.67 found on system at: /usr/local/bin/hsc2hs
+Using hscolour version 1.19 found on system at: /usr/bin/HsColour
+No hugs found
+No jhc found
+Using ld found on system at: /usr/bin/ld
+No lhc found
+No lhc-pkg found
+No nhc98 found
+Using pkg-config version 0.26 found on system at: /usr/bin/pkg-config
+Using ranlib found on system at: /usr/bin/ranlib
+Using strip found on system at: /usr/bin/strip
+Using tar found on system at: /bin/tar
+No uhc found
+Component build order: library
+creating dist/build
+creating dist/build/autogen
+Building parsec-3.1.0...
+Preprocessing library parsec-3.1.0...
+Building library...
+'/usr/local/bin/ghc-7.4.1' '--info'
+'/usr/local/bin/ghc-7.4.1' '--info'
+creating dist/build
+/usr/local/bin/ghc-7.4.1 --make -fbuilding-cabal-package -O -outputdir dist/build -odir dist/build -hidir dist/build -stubdir dist/build -i -idist/build -i. -idist/build/autogen -Idist/build/autogen -Idist/build -optP-include -optPdist/build/autogen/cabal_macros.h -package-name parsec-3.1.0 -hide-all-packages -no-user-package-conf -package-conf /home/massysett/ofx/sunlight-9398/db -package-conf dist/package.conf.inplace -package-id base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e -package-id bytestring-0.9.2.1-18f26186028d7c0e92e78edc9071d376 -package-id mtl-2.1.2-0973d74bbf4cfd12f281b730fcc93be9 -package-id syb-0.4.1-3c1c4ba90a7d3e28e8b3dbc84f8e7ee6 -XHaskell98 -XExistentialQuantification -XPolymorphicComponents -XMultiParamTypeClasses -XFlexibleInstances -XFlexibleContexts -XDeriveDataTypeable Text.Parsec Text.Parsec.String Text.Parsec.ByteString Text.Parsec.ByteString.Lazy Text.Parsec.Pos Text.Parsec.Error Text.Parsec.Prim Text.Parsec.Char Text.Parsec.Combinator Text.Parsec.Token Text.Parsec.Expr Text.Parsec.Language Text.Parsec.Perm Text.ParserCombinators.Parsec Text.ParserCombinators.Parsec.Char Text.ParserCombinators.Parsec.Combinator Text.ParserCombinators.Parsec.Error Text.ParserCombinators.Parsec.Expr Text.ParserCombinators.Parsec.Language Text.ParserCombinators.Parsec.Perm Text.ParserCombinators.Parsec.Pos Text.ParserCombinators.Parsec.Prim Text.ParserCombinators.Parsec.Token -O2
+[ 1 of 23] Compiling Text.Parsec.Pos  ( Text/Parsec/Pos.hs, dist/build/Text/Parsec/Pos.o )
+[ 2 of 23] Compiling Text.Parsec.Error ( Text/Parsec/Error.hs, dist/build/Text/Parsec/Error.o )
+[ 3 of 23] Compiling Text.ParserCombinators.Parsec.Error ( Text/ParserCombinators/Parsec/Error.hs, dist/build/Text/ParserCombinators/Parsec/Error.o )
+[ 4 of 23] Compiling Text.ParserCombinators.Parsec.Pos ( Text/ParserCombinators/Parsec/Pos.hs, dist/build/Text/ParserCombinators/Parsec/Pos.o )
+[ 5 of 23] Compiling Text.Parsec.Prim ( Text/Parsec/Prim.hs, dist/build/Text/Parsec/Prim.o )
+[ 6 of 23] Compiling Text.Parsec.Char ( Text/Parsec/Char.hs, dist/build/Text/Parsec/Char.o )
+[ 7 of 23] Compiling Text.Parsec.Combinator ( Text/Parsec/Combinator.hs, dist/build/Text/Parsec/Combinator.o )
+[ 8 of 23] Compiling Text.ParserCombinators.Parsec.Combinator ( Text/ParserCombinators/Parsec/Combinator.hs, dist/build/Text/ParserCombinators/Parsec/Combinator.o )
+[ 9 of 23] Compiling Text.Parsec.String ( Text/Parsec/String.hs, dist/build/Text/Parsec/String.o )
+[10 of 23] Compiling Text.ParserCombinators.Parsec.Char ( Text/ParserCombinators/Parsec/Char.hs, dist/build/Text/ParserCombinators/Parsec/Char.o )
+[11 of 23] Compiling Text.Parsec.ByteString ( Text/Parsec/ByteString.hs, dist/build/Text/Parsec/ByteString.o )
+[12 of 23] Compiling Text.Parsec.ByteString.Lazy ( Text/Parsec/ByteString/Lazy.hs, dist/build/Text/Parsec/ByteString/Lazy.o )
+[13 of 23] Compiling Text.Parsec.Token ( Text/Parsec/Token.hs, dist/build/Text/Parsec/Token.o )
+[14 of 23] Compiling Text.ParserCombinators.Parsec.Token ( Text/ParserCombinators/Parsec/Token.hs, dist/build/Text/ParserCombinators/Parsec/Token.o )
+[15 of 23] Compiling Text.Parsec.Expr ( Text/Parsec/Expr.hs, dist/build/Text/Parsec/Expr.o )
+[16 of 23] Compiling Text.ParserCombinators.Parsec.Prim ( Text/ParserCombinators/Parsec/Prim.hs, dist/build/Text/ParserCombinators/Parsec/Prim.o )
+[17 of 23] Compiling Text.ParserCombinators.Parsec ( Text/ParserCombinators/Parsec.hs, dist/build/Text/ParserCombinators/Parsec.o )
+[18 of 23] Compiling Text.ParserCombinators.Parsec.Expr ( Text/ParserCombinators/Parsec/Expr.hs, dist/build/Text/ParserCombinators/Parsec/Expr.o )
+[19 of 23] Compiling Text.Parsec      ( Text/Parsec.hs, dist/build/Text/Parsec.o )
+[20 of 23] Compiling Text.Parsec.Language ( Text/Parsec/Language.hs, dist/build/Text/Parsec/Language.o )
+[21 of 23] Compiling Text.ParserCombinators.Parsec.Language ( Text/ParserCombinators/Parsec/Language.hs, dist/build/Text/ParserCombinators/Parsec/Language.o )
+[22 of 23] Compiling Text.Parsec.Perm ( Text/Parsec/Perm.hs, dist/build/Text/Parsec/Perm.o )
+[23 of 23] Compiling Text.ParserCombinators.Parsec.Perm ( Text/ParserCombinators/Parsec/Perm.hs, dist/build/Text/ParserCombinators/Parsec/Perm.o )
+Linking...
+/usr/bin/ar -r dist/build/libHSparsec-3.1.0.a dist/build/Text/Parsec.o dist/build/Text/Parsec/String.o dist/build/Text/Parsec/ByteString.o dist/build/Text/Parsec/ByteString/Lazy.o dist/build/Text/Parsec/Pos.o dist/build/Text/Parsec/Error.o dist/build/Text/Parsec/Prim.o dist/build/Text/Parsec/Char.o dist/build/Text/Parsec/Combinator.o dist/build/Text/Parsec/Token.o dist/build/Text/Parsec/Expr.o dist/build/Text/Parsec/Language.o dist/build/Text/Parsec/Perm.o dist/build/Text/ParserCombinators/Parsec.o dist/build/Text/ParserCombinators/Parsec/Char.o dist/build/Text/ParserCombinators/Parsec/Combinator.o dist/build/Text/ParserCombinators/Parsec/Error.o dist/build/Text/ParserCombinators/Parsec/Expr.o dist/build/Text/ParserCombinators/Parsec/Language.o dist/build/Text/ParserCombinators/Parsec/Perm.o dist/build/Text/ParserCombinators/Parsec/Pos.o dist/build/Text/ParserCombinators/Parsec/Prim.o dist/build/Text/ParserCombinators/Parsec/Token.o
+In-place registering parsec-3.1.0...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db' '--package-conf=dist/package.conf.inplace'
+directory dist/doc/html/parsec does exist: False
+creating
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/parsec-3.1.0
+Installing LICENSE to
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/x86_64-linux-ghc-7.4.1/parsec-3.1.0/LICENSE
+Installing library in
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/ByteString
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec
+Installing dist/build/Text/Parsec.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec.hi
+Installing dist/build/Text/Parsec/String.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/String.hi
+Installing dist/build/Text/Parsec/ByteString.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/ByteString.hi
+Installing dist/build/Text/Parsec/ByteString/Lazy.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/ByteString/Lazy.hi
+Installing dist/build/Text/Parsec/Pos.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Pos.hi
+Installing dist/build/Text/Parsec/Error.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Error.hi
+Installing dist/build/Text/Parsec/Prim.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Prim.hi
+Installing dist/build/Text/Parsec/Char.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Char.hi
+Installing dist/build/Text/Parsec/Combinator.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Combinator.hi
+Installing dist/build/Text/Parsec/Token.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Token.hi
+Installing dist/build/Text/Parsec/Expr.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Expr.hi
+Installing dist/build/Text/Parsec/Language.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Language.hi
+Installing dist/build/Text/Parsec/Perm.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/Parsec/Perm.hi
+Installing dist/build/Text/ParserCombinators/Parsec.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Char.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Char.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Combinator.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Combinator.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Error.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Error.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Expr.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Expr.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Language.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Language.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Perm.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Perm.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Pos.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Pos.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Prim.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Prim.hi
+Installing dist/build/Text/ParserCombinators/Parsec/Token.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/Text/ParserCombinators/Parsec/Token.hi
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0
+Installing dist/build/libHSparsec-3.1.0.a to
+/home/massysett/ofx/sunlight-9398/prefix/lib/x86_64-linux-ghc-7.4.1/parsec-3.1.0/libHSparsec-3.1.0.a
+'/usr/local/bin/ghc-7.4.1' '--abi-hash' '-fbuilding-cabal-package' '-O' '-outputdir' 'dist/build' '-odir' 'dist/build' '-hidir' 'dist/build' '-stubdir' 'dist/build' '-i' '-idist/build' '-i.' '-idist/build/autogen' '-Idist/build/autogen' '-Idist/build' '-optP-include' '-optPdist/build/autogen/cabal_macros.h' '-package-name' 'parsec-3.1.0' '-hide-all-packages' '-no-user-package-conf' '-package-conf' '/home/massysett/ofx/sunlight-9398/db' '-package-id' 'base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e' '-package-id' 'bytestring-0.9.2.1-18f26186028d7c0e92e78edc9071d376' '-package-id' 'mtl-2.1.2-0973d74bbf4cfd12f281b730fcc93be9' '-package-id' 'syb-0.4.1-3c1c4ba90a7d3e28e8b3dbc84f8e7ee6' '-XHaskell98' '-XExistentialQuantification' '-XPolymorphicComponents' '-XMultiParamTypeClasses' '-XFlexibleInstances' '-XFlexibleContexts' '-XDeriveDataTypeable' 'Text.Parsec' 'Text.Parsec.String' 'Text.Parsec.ByteString' 'Text.Parsec.ByteString.Lazy' 'Text.Parsec.Pos' 'Text.Parsec.Error' 'Text.Parsec.Prim' 'Text.Parsec.Char' 'Text.Parsec.Combinator' 'Text.Parsec.Token' 'Text.Parsec.Expr' 'Text.Parsec.Language' 'Text.Parsec.Perm' 'Text.ParserCombinators.Parsec' 'Text.ParserCombinators.Parsec.Char' 'Text.ParserCombinators.Parsec.Combinator' 'Text.ParserCombinators.Parsec.Error' 'Text.ParserCombinators.Parsec.Expr' 'Text.ParserCombinators.Parsec.Language' 'Text.ParserCombinators.Parsec.Perm' 'Text.ParserCombinators.Parsec.Pos' 'Text.ParserCombinators.Parsec.Prim' 'Text.ParserCombinators.Parsec.Token' '-O2'
+Registering parsec-3.1.0...
+'/usr/local/bin/ghc-pkg-7.4.1' 'update' '-' '--global' '--no-user-package-conf' '--package-conf=/home/massysett/ofx/sunlight-9398/db'
+Installed parsec-3.1.0
+
+Standard error:
+/usr/bin/ar: creating dist/build/libHSpretty-1.1.0.0.a
+/usr/bin/ar: creating dist/build/libHSsyb-0.4.1.a
+/usr/bin/ar: creating dist/build/libHStransformers-0.3.0.0.a
+/usr/bin/ar: creating dist/build/libHSmtl-2.1.2.a
+/usr/bin/ar: creating dist/build/libHSparsec-3.1.0.a
+
+ghc-pkg-7.4.1 ["list","--global","--package-conf=/home/massysett/ofx/sunlight-9398/db"] succeeded with exit code 0
+Standard output:
+/opt/ghc/7.4.1/lib/ghc-7.4.1/package.conf.d:
+    Cabal-1.14.0
+    array-0.4.0.0
+    base-4.5.0.0
+    bin-package-db-0.0.0.0
+    binary-0.5.1.0
+    bytestring-0.9.2.1
+    containers-0.4.2.1
+    deepseq-1.3.0.0
+    directory-1.1.0.2
+    extensible-exceptions-0.1.1.4
+    filepath-1.3.0.0
+    (ghc-7.4.1)
+    ghc-prim-0.2.0.0
+    (haskell2010-1.1.0.1)
+    (haskell98-2.0.0.1)
+    hoopl-3.8.7.3
+    hpc-0.5.1.1
+    integer-gmp-0.4.0.0
+    old-locale-1.0.0.4
+    old-time-1.1.0.0
+    pretty-1.1.1.0
+    process-1.1.0.1
+    rts-1.0
+    template-haskell-2.7.0.0
+    time-1.4
+    unix-2.5.1.0
+
+/home/massysett/ofx/sunlight-9398/db:
+    mtl-2.1.2
+    parsec-3.1.0
+    pretty-1.1.0.0
+    syb-0.4.1
+    transformers-0.3.0.0
+
+
+Standard error:
+WARNING: cache is out of date: /opt/ghc/7.4.1/lib/ghc-7.4.1/package.conf.d/package.cache
+  use 'ghc-pkg recache' to fix.
+
+ghc ["--make","Setup.hs"] succeeded with exit code 0
+Standard output:
+[1 of 1] Compiling Main             ( Setup.hs, Setup.o )
+Linking Setup ...
+
+Standard error:
+<empty>
+
+./Setup ["configure","--verbose=2","--with-compiler=ghc-7.4.1","--with-hc-pkg=ghc-pkg-7.4.1","--prefix=/home/massysett/ofx/sunlight-9398/prefix","--package-db=clear","--package-db=global","--package-db=/home/massysett/ofx/sunlight-9398/db","--enable-tests"] succeeded with exit code 0
+Standard output:
+Configuring ofx-0.4.0.2...
+Dependency base >=4.5.0.0: using base-4.5.0.0
+Dependency parsec >=3.1.0: using parsec-3.1.0
+Dependency pretty >=1.1.0.0: using pretty-1.1.1.0
+Dependency time >=1.4: using time-1.4
+Using Cabal-1.16.0 compiled by ghc-7.6
+Using compiler: ghc-7.4.1
+Using install prefix: /home/massysett/ofx/sunlight-9398/prefix
+Binaries installed in: /home/massysett/ofx/sunlight-9398/prefix/bin
+Libraries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1
+Private binaries installed in:
+/home/massysett/ofx/sunlight-9398/prefix/libexec
+Data files installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/ofx-0.4.0.2
+Documentation installed in:
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/ofx-0.4.0.2
+No alex found
+Using ar found on system at: /usr/bin/ar
+No c2hs found
+Using cpphs version 1.16 found on system at: /home/massysett/.cabal/bin/cpphs
+No ffihugs found
+Using gcc version 4.7 found on system at: /usr/bin/gcc
+Using ghc version 7.4.1 given by user at: /usr/local/bin/ghc-7.4.1
+Using ghc-pkg version 7.4.1 given by user at: /usr/local/bin/ghc-pkg-7.4.1
+No greencard found
+Using haddock version 2.13.2 found on system at: /usr/local/bin/haddock
+Using happy version 1.19.2 found on system at:
+/home/massysett/.cabal/bin/happy
+No hmake found
+Using hpc version 0.6 found on system at: /usr/local/bin/hpc
+Using hsc2hs version 0.67 found on system at: /usr/local/bin/hsc2hs
+Using hscolour version 1.19 found on system at: /usr/bin/HsColour
+No hugs found
+No jhc found
+Using ld found on system at: /usr/bin/ld
+No lhc found
+No lhc-pkg found
+No nhc98 found
+Using pkg-config version 0.26 found on system at: /usr/bin/pkg-config
+Using ranlib found on system at: /usr/bin/ranlib
+Using strip found on system at: /usr/bin/strip
+Using tar found on system at: /bin/tar
+No uhc found
+
+Standard error:
+<empty>
+
+./Setup ["build","--verbose=2"] succeeded with exit code 0
+Standard output:
+creating dist/build
+creating dist/build/autogen
+Building ofx-0.4.0.2...
+Preprocessing library ofx-0.4.0.2...
+Building library...
+creating dist/build
+/usr/local/bin/ghc-7.4.1 --make -fbuilding-cabal-package -O -odir dist/build -hidir dist/build -stubdir dist/build -i -idist/build -i. -idist/build/autogen -Idist/build/autogen -Idist/build -optP-include -optPdist/build/autogen/cabal_macros.h -package-name ofx-0.4.0.2 -hide-all-packages -no-user-package-conf -package-conf /home/massysett/ofx/sunlight-9398/db -package-conf dist/package.conf.inplace -package-id base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e -package-id parsec-3.1.0-5130a94378adeabd65c9da744632809b -package-id pretty-1.1.1.0-74ee6c6be86f83487da68d408cc3ae22 -package-id time-1.4-96b42dcaca5cdbc30bab9dcc07384b8d -XHaskell98 Data.OFX -Wall
+[1 of 1] Compiling Data.OFX         ( Data/OFX.hs, dist/build/Data/OFX.o )
+Linking...
+/usr/bin/ar -r dist/build/libHSofx-0.4.0.2.a dist/build/Data/OFX.o
+/usr/bin/ld -x --hash-size=31 --reduce-memory-overheads -r -o dist/build/HSofx-0.4.0.2.o dist/build/Data/OFX.o
+In-place registering ofx-0.4.0.2...
+/usr/local/bin/ghc-pkg-7.4.1 update - --global --no-user-package-conf --package-conf=/home/massysett/ofx/sunlight-9398/db --package-conf=dist/package.conf.inplace
+
+Standard error:
+/usr/bin/ar: creating dist/build/libHSofx-0.4.0.2.a
+
+./Setup ["install","--verbose=2"] succeeded with exit code 0
+Standard output:
+directory dist/doc/html/ofx does exist: False
+creating /home/massysett/ofx/sunlight-9398/prefix/share/doc/ofx-0.4.0.2
+Installing LICENSE to
+/home/massysett/ofx/sunlight-9398/prefix/share/doc/ofx-0.4.0.2/LICENSE
+Installing library in
+/home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1/Data
+creating /home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1
+creating /home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2
+creating /home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1
+creating
+/home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1/Data
+Installing dist/build/Data/OFX.hi to
+/home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1/Data/OFX.hi
+creating /home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1
+Installing dist/build/libHSofx-0.4.0.2.a to
+/home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1/libHSofx-0.4.0.2.a
+creating /home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1
+Installing dist/build/HSofx-0.4.0.2.o to
+/home/massysett/ofx/sunlight-9398/prefix/lib/ofx-0.4.0.2/ghc-7.4.1/HSofx-0.4.0.2.o
+/usr/local/bin/ghc-7.4.1 --abi-hash -fbuilding-cabal-package -O -odir dist/build -hidir dist/build -stubdir dist/build -i -idist/build -i. -idist/build/autogen -Idist/build/autogen -Idist/build -optP-include -optPdist/build/autogen/cabal_macros.h -package-name ofx-0.4.0.2 -hide-all-packages -no-user-package-conf -package-conf /home/massysett/ofx/sunlight-9398/db -package-id base-4.5.0.0-6db966b4cf8c1a91188e66d354ba065e -package-id parsec-3.1.0-5130a94378adeabd65c9da744632809b -package-id pretty-1.1.1.0-74ee6c6be86f83487da68d408cc3ae22 -package-id time-1.4-96b42dcaca5cdbc30bab9dcc07384b8d -XHaskell98 Data.OFX -Wall
+Registering ofx-0.4.0.2...
+/usr/local/bin/ghc-pkg-7.4.1 update - --global --no-user-package-conf --package-conf=/home/massysett/ofx/sunlight-9398/db
+
+Standard error:
+<empty>
+
+ghc-pkg-7.4.1 ["list","--global","--package-conf=/home/massysett/ofx/sunlight-9398/db"] succeeded with exit code 0
+Standard output:
+/opt/ghc/7.4.1/lib/ghc-7.4.1/package.conf.d:
+    Cabal-1.14.0
+    array-0.4.0.0
+    base-4.5.0.0
+    bin-package-db-0.0.0.0
+    binary-0.5.1.0
+    bytestring-0.9.2.1
+    containers-0.4.2.1
+    deepseq-1.3.0.0
+    directory-1.1.0.2
+    extensible-exceptions-0.1.1.4
+    filepath-1.3.0.0
+    (ghc-7.4.1)
+    ghc-prim-0.2.0.0
+    (haskell2010-1.1.0.1)
+    (haskell98-2.0.0.1)
+    hoopl-3.8.7.3
+    hpc-0.5.1.1
+    integer-gmp-0.4.0.0
+    old-locale-1.0.0.4
+    old-time-1.1.0.0
+    pretty-1.1.1.0
+    process-1.1.0.1
+    rts-1.0
+    template-haskell-2.7.0.0
+    time-1.4
+    unix-2.5.1.0
+
+/home/massysett/ofx/sunlight-9398/db:
+    mtl-2.1.2
+    ofx-0.4.0.2
+    parsec-3.1.0
+    pretty-1.1.0.0
+    syb-0.4.1
+    transformers-0.3.0.0
+
+
+Standard error:
+WARNING: cache is out of date: /opt/ghc/7.4.1/lib/ghc-7.4.1/package.conf.d/package.cache
+  use 'ghc-pkg recache' to fix.
+

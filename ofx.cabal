@@ -1,5 +1,5 @@
 name:                ofx
-version:             0.4.0.0
+version:             0.4.0.2
 synopsis:            Parser for OFX data
 description:
 
@@ -36,6 +36,9 @@ maintainer:          omari@smileystation.com
 category:            Finance
 build-type:          Simple
 cabal-version:       >=1.8
+extra-source-files:
+  minimum-versions.txt, current-versions.txt, sunlight-test.hs
+tested-with: GHC==7.4.1, GHC==7.6.3
 
 source-repository head
   type: git
@@ -48,8 +51,8 @@ library
       Data.OFX
   
   build-depends:
-      base ==4.6.*
-    , parsec ==3.1.*
-    , pretty ==1.1.*
-    , time ==1.4.*
+      base >=4.5.0.0
+    , parsec >=3.1.0
+    , pretty >=1.1.0.0
+    , time >=1.4
   
