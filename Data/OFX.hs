@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 -- | Parser for downloaded OFX files.
 --
 -- This parser was written based on the OFX version 1.03
@@ -131,9 +131,7 @@ module Data.OFX
 -- # Imports
 --
 
-import Control.Applicative
-  ( (<$), (<|>), (*>), many, optional,
-    (<$>), (<*), (<*>), pure )
+import Control.Applicative (many, optional, (<|>))
 import Control.Monad (replicateM)
 import qualified Data.Time as T
   
@@ -143,8 +141,8 @@ import Text.Parsec
     try, digit, many1, spaces, string, choice )
 import qualified Text.Parsec as P
 import Data.Maybe (listToMaybe)
+import Data.Monoid ((<>))
 import qualified Data.Monoid as M
-import Data.Monoid ((<>), mempty)
 import Text.PrettyPrint
   ( Doc, hang, text, sep, vcat, nest, (<+>), ($$),
     parens, brackets )

@@ -1,2 +1,4 @@
 dist/
 ofxtest
+stack.yaml
+.stack-work/
