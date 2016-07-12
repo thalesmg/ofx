@@ -102,6 +102,12 @@ module Data.OFX
   , OrigCurrency(..)
   , origCurrency
 
+  -- * Running parsers
+  , parseOfxFile
+  , parseTransactions
+  , prettyRenderOfxFile
+  , prettyRenderTransactions
+
   -- * Parsec parsers
   , ofxFile
   , newline
@@ -132,20 +138,20 @@ module Data.OFX
 --
 
 import Control.Applicative (many, optional, (<|>))
-import Control.Monad (replicateM)
+import Control.Monad (replicateM, (<=<))
 import qualified Data.Time as T
   
 import Text.Parsec.String (Parser)
 import Text.Parsec
   ( lookAhead, char, manyTill, anyChar, (<?>), eof,
-    try, digit, many1, spaces, string, choice )
+    try, digit, many1, spaces, string, choice, parse )
 import qualified Text.Parsec as P
 import Data.Maybe (listToMaybe)
 import Data.Monoid ((<>))
 import qualified Data.Monoid as M
 import Text.PrettyPrint
   ( Doc, hang, text, sep, vcat, nest, (<+>), ($$),
-    parens, brackets )
+    parens, brackets, render )
 
 
 --
@@ -171,7 +177,7 @@ type HeaderValue = String
 -- @tag:value@ followed by a newline. These are followed by a blank
 -- line.
 data OFXHeader = OFXHeader HeaderTag HeaderValue
-  deriving (Eq, Show)
+  deriving (Eq, Show, Read)
 
 -- | The name of an OFX tag
 type TagName = String
@@ -184,7 +190,7 @@ type TagData = String
 -- tags. In OFX, a tag either has data and no child elements, or it
 -- has no data and it has child elements.
 data Tag = Tag TagName (Either TagData [Tag])
-  deriving (Eq, Show)
+  deriving (Eq, Show, Read)
 
 -- | All the data from an OFX file.
 data OFXFile = OFXFile
@@ -194,7 +200,7 @@ data OFXFile = OFXFile
   -- ^ All the data will be contained in a root tag with the TagName
   -- @OFX@.
 
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Read)
 
 --
 -- # Parsers
@@ -523,7 +529,7 @@ data TrnType
   -- ^ Repeating payment / standing order
 
   | TOTHER
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord, Show, Read)
 
 -- | A single STMTTRN, see OFX spec section 11.4.2.3.1. This is most
 -- likely what you are interested in after downloading a statement
@@ -630,7 +636,7 @@ data Transaction = Transaction
     , txCurrency :: Maybe (Either Currency OrigCurrency)
     -- ^ Currency option. OFX spec says to choose either CURRENCY or
     -- ORIGCURRENCY.
-    } deriving (Show)
+    } deriving (Show, Read)
 
 data Payee = Payee
   { peNAME :: String
@@ -642,7 +648,7 @@ data Payee = Payee
   , pePOSTALCODE :: String
   , peCOUNTRY :: Maybe String
   , pePHONE :: String
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Read)
 
 -- | Can be either REPLACE or DELETE.
 data CorrectAction
@@ -668,7 +674,7 @@ data BankAcctTo = BankAcctTo
 
   , btACCTKEY :: Maybe String
   -- ^ Checksum for international banks
-  } deriving Show
+  } deriving (Show, Read)
 
 data CCAcctTo = CCAcctTo
   { ctACCTID :: String
@@ -677,14 +683,14 @@ data CCAcctTo = CCAcctTo
   , ctACCTKEY :: Maybe String
   -- ^ Checksum for international banks
 
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Read)
 
 data AcctType
   = ACHECKING
   | ASAVINGS
   | AMONEYMRKT
   | ACREDITLINE
-  deriving (Eq, Show, Ord)
+  deriving (Eq, Show, Ord, Read)
 
 acctType :: String -> Err AcctType
 acctType s
@@ -702,13 +708,13 @@ data CurrencyData = CurrencyData
 
   , cdCURSYM :: String
   -- ^ ISO-4217 3-letter currency identifier
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Read)
 
 data Currency = Currency CurrencyData
-  deriving (Eq, Show)
+  deriving (Eq, Show, Read)
 
 data OrigCurrency = OrigCurrency CurrencyData
-  deriving (Eq, Show)
+  deriving (Eq, Show, Read)
 
 --
 -- # Helpers to build aggregates
@@ -974,3 +980,42 @@ pExceptional
 pExceptional fe fa =
   either (\e -> hang "Exception:" 2 $ parens (fe e))
          (\g -> hang "Success:" 2 $ parens (fa g))
+
+-- # Running Parsers
+
+-- | Parses an input file.  Returns either an error message or the
+-- resulting 'OFXFile'.
+parseOfxFile :: String -> Err OFXFile
+parseOfxFile = either (Left . show) (Right . id) . parse ofxFile ""
+
+-- | Parses an OFX file and gets the list of 'Tranasction'.
+parseTransactions :: String -> Err [Transaction]
+parseTransactions = transactions <=< parseOfxFile
+
+-- # Parsing and pretty printing
+
+-- | Parses an input file to an OfxFile.  Returns a pretty-printed
+-- string with the results of the parse.
+prettyRenderOfxFile
+  :: String
+  -- ^ File contents to parse
+  -> String
+  -- ^ Pretty printed result of rending the result of the parse, which
+  -- is either an error message or an 'OFXFile'.
+prettyRenderOfxFile
+  = render
+  . pExceptional text pFile
+  . parseOfxFile
+
+-- | Parses an input file to an OfxFile, and then to a list of
+-- 'Transaction'.  Returns a pretty-printed string with the results.
+prettyRenderTransactions
+  :: String
+  -- ^ File contents to parse
+  -> String
+  -- ^ Pretty printed result of rendering the result of the parse,
+  -- which is either an error message or a list of 'Transaction'.
+prettyRenderTransactions
+  = render
+  . pExceptional text (pList . map pTransaction)
+  . parseTransactions
