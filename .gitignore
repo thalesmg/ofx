@@ -2,6 +2,7 @@
 
 .stack-work/
 dist/
+src/
 # Do not track project's cabal file
 ofx.cabal
 
