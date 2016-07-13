@@ -28,31 +28,14 @@
 -- For example, to read in the filename given on the command line and
 -- parse it and print it nicely:
 --
--- > import System.Environment
--- > import Text.Parsec
--- > import Text.PrettyPrint
--- > import Data.OFX
--- > import System.IO
--- > import System.Exit
--- >
--- > main :: IO ()
--- > main = do
--- >   filename:[] <- getArgs
--- >   contents <- readFile filename
--- >   ofx <- case parse ofxFile filename contents of
--- >     Left e -> do
--- >       hPutStrLn stderr . show $ e
--- >       exitFailure
--- >     Right g -> return g
--- >   putStrLn . render . pFile $ ofx
--- >   putStrLn
--- >     . render
--- >     . pExceptional text (pList . map pTransaction)
--- >     . transactions
--- >     $ ofx
--- >   putStrLn . render . pMaybe text . fiName $ ofx
--- >   putStrLn . render . pMaybe text . accountNumber $ ofx
---
+-- The @ofx@ package includes two executable files that you can use at
+-- the command line to test the library and see how it works.  The
+-- @renderTransactions@ executable reads an OFX file on standard
+-- input, runs it through the 'prettyRenderTransactions' function, and
+-- prints the result to standard output.  The @renderOfx@ executable
+-- reads an OFX file on standard input, runs it through the
+-- 'prettyRenderOfxFile' function, and prints the result to standard
+-- output.
 
 module Data.OFX
   ( -- * Error handling

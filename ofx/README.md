@@ -1,8 +1,5 @@
 # ofx
 
-This contains a Haskell library to parse Open Financial Exchange (OFX)
-files.
-
 ## License
 
 This package is released under the BSD3 license. Please see the LICENSE file.
