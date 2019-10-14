@@ -39,9 +39,9 @@ Library
     lib
   build-depends:
       base >= 4.8 && < 5
-    , parsec >= 3.1
-    , pretty >= 1.1
-    , time >= 1.4
+    , parsec
+    , pretty
+    , time
 
 source-repository head
   type: git
@@ -60,9 +60,9 @@ Executable renderOfx
     lib
   build-depends:
       base >= 4.8 && < 5
-    , parsec >= 3.1
-    , pretty >= 1.1
-    , time >= 1.4
+    , parsec
+    , pretty
+    , time
 
 Executable renderTransactions
   main-is: renderTransactions.hs
@@ -77,6 +77,6 @@ Executable renderTransactions
     lib
   build-depends:
       base >= 4.8 && < 5
-    , parsec >= 3.1
-    , pretty >= 1.1
-    , time >= 1.4
+    , parsec
+    , pretty
+    , time
