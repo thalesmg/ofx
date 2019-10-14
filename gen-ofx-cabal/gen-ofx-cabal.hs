@@ -3,7 +3,7 @@ module Main (main) where
 import qualified Cartel
 
 version :: [Word]
-version = [0,4,2,0]
+version = [0,4,4,0]
 
 properties :: Cartel.Properties
 properties = Cartel.Properties

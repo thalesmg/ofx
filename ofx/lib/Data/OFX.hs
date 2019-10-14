@@ -1,4 +1,6 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveGeneric #-}
 -- | Parser for downloaded OFX files.
 --
 -- This parser was written based on the OFX version 1.03
@@ -122,16 +124,18 @@ module Data.OFX
 
 import Control.Applicative (many, optional, (<|>))
 import Control.Monad (replicateM, (<=<))
+import Data.Data (Data)
+import Data.Maybe (listToMaybe)
+import Data.Monoid ((<>))
+import qualified Data.Monoid as M
 import qualified Data.Time as T
-  
+import Data.Typeable (Typeable)
+import GHC.Generics (Generic)
 import Text.Parsec.String (Parser)
 import Text.Parsec
   ( lookAhead, char, manyTill, anyChar, (<?>), eof,
     try, digit, many1, spaces, string, choice, parse )
 import qualified Text.Parsec as P
-import Data.Maybe (listToMaybe)
-import Data.Monoid ((<>))
-import qualified Data.Monoid as M
 import Text.PrettyPrint
   ( Doc, hang, text, sep, vcat, nest, (<+>), ($$),
     parens, brackets, render )
@@ -160,7 +164,7 @@ type HeaderValue = String
 -- @tag:value@ followed by a newline. These are followed by a blank
 -- line.
 data OFXHeader = OFXHeader HeaderTag HeaderValue
-  deriving (Eq, Show, Read)
+  deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 -- | The name of an OFX tag
 type TagName = String
@@ -173,7 +177,7 @@ type TagData = String
 -- tags. In OFX, a tag either has data and no child elements, or it
 -- has no data and it has child elements.
 data Tag = Tag TagName (Either TagData [Tag])
-  deriving (Eq, Show, Read)
+  deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 -- | All the data from an OFX file.
 data OFXFile = OFXFile
@@ -183,7 +187,7 @@ data OFXFile = OFXFile
   -- ^ All the data will be contained in a root tag with the TagName
   -- @OFX@.
 
-  } deriving (Eq, Show, Read)
+  } deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 --
 -- # Parsers
@@ -512,7 +516,7 @@ data TrnType
   -- ^ Repeating payment / standing order
 
   | TOTHER
-  deriving (Eq, Ord, Show, Read)
+  deriving (Eq, Ord, Show, Read, Data, Generic, Typeable)
 
 -- | A single STMTTRN, see OFX spec section 11.4.2.3.1. This is most
 -- likely what you are interested in after downloading a statement
@@ -619,7 +623,7 @@ data Transaction = Transaction
     , txCurrency :: Maybe (Either Currency OrigCurrency)
     -- ^ Currency option. OFX spec says to choose either CURRENCY or
     -- ORIGCURRENCY.
-    } deriving (Show, Read)
+    } deriving (Show, Read, Data, Generic, Typeable)
 
 data Payee = Payee
   { peNAME :: String
@@ -631,7 +635,7 @@ data Payee = Payee
   , pePOSTALCODE :: String
   , peCOUNTRY :: Maybe String
   , pePHONE :: String
-  } deriving (Eq, Show, Read)
+  } deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 -- | Can be either REPLACE or DELETE.
 data CorrectAction
@@ -640,7 +644,7 @@ data CorrectAction
 
   | DELETE
   -- ^ Deletes the transaction referenced by the CORRECTFITID
-  deriving (Eq, Show, Read)
+  deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 data BankAcctTo = BankAcctTo
   { btBANKID :: String
@@ -657,7 +661,7 @@ data BankAcctTo = BankAcctTo
 
   , btACCTKEY :: Maybe String
   -- ^ Checksum for international banks
-  } deriving (Show, Read)
+  } deriving (Show, Read, Data, Generic, Typeable)
 
 data CCAcctTo = CCAcctTo
   { ctACCTID :: String
@@ -666,14 +670,14 @@ data CCAcctTo = CCAcctTo
   , ctACCTKEY :: Maybe String
   -- ^ Checksum for international banks
 
-  } deriving (Eq, Show, Read)
+  } deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 data AcctType
   = ACHECKING
   | ASAVINGS
   | AMONEYMRKT
   | ACREDITLINE
-  deriving (Eq, Show, Ord, Read)
+  deriving (Eq, Show, Ord, Read, Data, Generic, Typeable)
 
 acctType :: String -> Err AcctType
 acctType s
@@ -691,13 +695,13 @@ data CurrencyData = CurrencyData
 
   , cdCURSYM :: String
   -- ^ ISO-4217 3-letter currency identifier
-  } deriving (Eq, Show, Read)
+  } deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 data Currency = Currency CurrencyData
-  deriving (Eq, Show, Read)
+  deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 data OrigCurrency = OrigCurrency CurrencyData
-  deriving (Eq, Show, Read)
+  deriving (Eq, Show, Read, Data, Generic, Typeable)
 
 --
 -- # Helpers to build aggregates
