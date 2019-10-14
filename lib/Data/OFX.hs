@@ -27,9 +27,6 @@
 -- interested in. If you are interested in other data you can query
 -- the 'Tag' tree for what you need.
 --
--- For example, to read in the filename given on the command line and
--- parse it and print it nicely:
---
 -- The @ofx@ package includes two executable files that you can use at
 -- the command line to test the library and see how it works.  The
 -- @renderTransactions@ executable reads an OFX file on standard
@@ -89,7 +86,9 @@ module Data.OFX
 
   -- * Running parsers
   , parseOfxFile
+  , loadOfxFile
   , parseTransactions
+  , loadTransactions
   , prettyRenderOfxFile
   , prettyRenderTransactions
 
@@ -975,9 +974,27 @@ pExceptional fe fa =
 parseOfxFile :: String -> Err OFXFile
 parseOfxFile = either (Left . show) (Right . id) . parse ofxFile ""
 
--- | Parses an OFX file and gets the list of 'Tranasction'.
+-- | Parses an OFX file and gets the list of 'Transaction'.
 parseTransactions :: String -> Err [Transaction]
 parseTransactions = transactions <=< parseOfxFile
+
+-- | Loads an OFX file from disk, parses it, and returns the
+-- resulting 'OFXFile'.  Uses 'fail' if the parse fails.
+loadOfxFile :: FilePath -> IO OFXFile
+loadOfxFile fp = do
+  txt <- readFile fp
+  case parseOfxFile txt of
+    Left e -> fail e
+    Right g -> return g
+
+-- | Loads an OFX file from disk, parses it, and returns the resulting list of
+-- 'Transaction'.  Uses 'fail' if the parse fails.
+loadTransactions :: FilePath -> IO [Transaction]
+loadTransactions fp = do
+  txt <- readFile fp
+  case parseTransactions txt of
+    Left e -> fail e
+    Right g -> return g
 
 -- # Parsing and pretty printing
 
