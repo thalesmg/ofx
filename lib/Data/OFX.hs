@@ -39,7 +39,7 @@
 module Data.OFX
   ( -- * Error handling
     Err
-  
+
     -- * The OFX data tree
   , HeaderTag
   , HeaderValue
@@ -103,6 +103,7 @@ module Data.OFX
   , date
   , time
   , tzOffset
+  , parseDate
 
   -- * Pretty printers
   , pPayee
@@ -124,12 +125,13 @@ module Data.OFX
 import Control.Applicative (many, optional, (<|>))
 import Control.Monad (replicateM, (<=<))
 import Data.Data (Data)
-import Data.Maybe (listToMaybe)
+import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Monoid ((<>))
 import qualified Data.Monoid as M
 import qualified Data.Time as T
 import Data.Typeable (Typeable)
 import GHC.Generics (Generic)
+import Text.Parsec.Char (satisfy)
 import Text.Parsec.String (Parser)
 import Text.Parsec
   ( lookAhead, char, manyTill, anyChar, (<?>), eof,
@@ -230,13 +232,14 @@ escChar =
   <?> "character"
 
 header :: Parser OFXHeader
-header
-  = OFXHeader
-  <$> manyTill anyChar (char ':')
-  <*  optional (many (char ' '))
-  <*> manyTill anyChar newline
-  <?> "OFX header"
-  
+header = do
+  _ <- lookAhead (satisfy (/= '<'))
+  OFXHeader
+    <$> manyTill anyChar (char ':')
+    <*  optional (many (char ' '))
+    <*> manyTill anyChar newline
+    <?> "OFX header"
+
 -- | Parses any opening tag. Returns the name of the tag.
 openingTag :: Parser TagName
 openingTag =
@@ -287,13 +290,13 @@ tag =
       else Tag n (Right children) <$ spaces <* closingTag n
                                   <* spaces
   <?> "OFX tag"
-        
+
 
 -- | Parses an entire OFX file, including headers.
 ofxFile :: Parser OFXFile
 ofxFile
   = OFXFile
-  <$> manyTill header newline
+  <$> many header
   <*> tag
   <* spaces
   <* eof
@@ -326,7 +329,7 @@ date =
       Just (t, z) -> return $ T.ZonedTime (T.LocalTime day t) z
   <?> "date"
 
-  
+
 -- | Parses an OFX time. Fails if the time is not valid or if there is
 -- no time to parse. Fails if there is no time to parse; however, if
 -- there is a time but no zone, returns the time and UTC for the zone.
@@ -336,20 +339,14 @@ time =
     h <- fmap read $ replicateM 2 digit
     m <- fmap read $ replicateM 2 digit
     s <- fmap read $ replicateM 2 digit
-    (milli, tz) <- do
-      mayDot <- optional (char '.')
-      case mayDot of
-        Nothing -> return (0, T.utc)
-        Just _ -> do
-          mil <- fmap ((/ 1000) . read) $ replicateM 3 digit
-          mayTz <- optional tzOffset
-          case mayTz of
-            Nothing -> return (mil, T.utc)
-            Just t -> return (mil, t)
+    milli <- maybe 0 ((/ 1000) . read) <$>
+      optional (char '.' *> replicateM 3 digit)
+    tz <- fromMaybe T.utc <$>
+      optional tzOffset
     let sec = s + milli
     return (T.TimeOfDay h m sec, tz)
   <?> "time"
-                
+
 
 -- | Parses a time zone offset. Fails if there is no time zone offset
 -- to parse.
@@ -445,7 +442,7 @@ bankAccountNumber =
 -- | Gets either the credit card or bank account number, if available.
 accountNumber :: OFXFile -> Maybe TagData
 accountNumber f = creditCardNumber f <|> bankAccountNumber f
-  
+
 
 -- | Finds the first tag (either this tag or any children) that has
 -- the given name and that is a data tag (not an aggregate tag.) If no
@@ -468,7 +465,7 @@ required n t = case findData n t of
 
 --
 -- # OFX data
--- 
+--
 
 -- | OFX transaction types. These are used in STMTTRN aggregates, see
 -- OFX spec section 11.4.2.3.1.1.
@@ -742,7 +739,7 @@ transaction t = do
 
   let mayDtuStr = findData "DTUSER" t
   dtu <- maybe (return Nothing) (fmap Just . parseDate) mayDtuStr
-      
+
   let mayDtAvail = findData "DTAVAIL" t
 
   dta <- maybe (return Nothing) (fmap Just . parseDate) mayDtAvail
@@ -752,7 +749,7 @@ transaction t = do
   correctAct <-
     case findData "CORRECTACTION" t of
       Nothing -> return Nothing
-      Just d -> 
+      Just d ->
         maybe (return Nothing)
           (fromMaybe ("could not parse correct action: " ++ d))
         . safeRead
@@ -766,7 +763,7 @@ transaction t = do
   let mayPyeInfo = fmap (return . Left) (findData "NAME" t)
                    <|> fmap (fmap Right) (payee t)
   pyeInfo <- maybe (return Nothing) (fmap Just) mayPyeInfo
- 
+
   let mayAcctTo = (fmap (fmap Left) $ bankAcctTo t)
                <|> (fmap (fmap Right) $ ccAcctTo t)
       mayCcy = (fmap (fmap Left) $ currency t)
@@ -793,7 +790,7 @@ transaction t = do
     , txAccountTo = acctTo
     , txMEMO = memo
     , txCurrency = ccy
-    }      
+    }
 
 -- | Parses a Payee record from its parent tag.
 payee
@@ -820,7 +817,7 @@ payee = fmap getPayee . listToMaybe . find "PAYEE"
       <*> required "POSTALCODE" t
       <*> pure (findData "COUNTRY" t)
       <*> required "PHONE" t
-  
+
 
 currency :: Tag -> Maybe (Err Currency)
 currency
